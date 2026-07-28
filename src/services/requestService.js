@@ -13,6 +13,7 @@ import {
 
 import db from "../firebase/firestore";
 import { addNotification } from "./notificationService";
+import { updateItemStatus } from "./itemService";
 
 const requestsCollection = collection(db, "shoppingRequests");
 
@@ -24,6 +25,12 @@ export const addRequest = async (requestData) => {
     requestedAt: serverTimestamp(),
     purchasedAt: null,
   });
+
+  // Change Kitchen Item Status
+  await updateItemStatus(
+    requestData.itemId,
+    "Requested"
+  );
 
   // Admin Notification
   await addNotification({
@@ -84,7 +91,12 @@ export const markAsPurchased = async (
     purchasedBy,
   });
 
+  // Make Kitchen Item Available Again
   if (request) {
+    await updateItemStatus(
+      request.itemId,
+      "Available"
+    );
 
     // Admin Notification
     await addNotification({
@@ -99,7 +111,6 @@ export const markAsPurchased = async (
       icon: "✅",
       title: `${request.itemName} has been purchased`,
     });
-
   }
 };
 

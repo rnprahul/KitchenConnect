@@ -71,10 +71,7 @@ function ShoppingRequests() {
     }
   };
 
-  const outOfStockItems = items.filter(
-    (item) => item.status === "Out of Stock"
-  );
-
+  
   return (
     <DashboardLayout>
 
@@ -82,13 +79,13 @@ function ShoppingRequests() {
         Shopping Requests
       </h2>
 
-      {/* Out of Stock Items */}
+      {/* Kitchen Items */}
 
       <div className="card mb-4">
 
         <div className="card-header text-center text-md-start">
-          <span className="fw-bold text-danger">
-    Out of Stock Items
+          <span className="fw-bold text-success">
+    Kitchen Items
   </span>
         </div>
 
@@ -101,50 +98,59 @@ function ShoppingRequests() {
 
               <tr>
                 <th>Item</th>
-                <th></th>
+                <th>Status</th>
+                <th className="text-center">Action</th>
               </tr>
 
             </thead>
 
             <tbody>
 
-              {outOfStockItems.length === 0 ? (
+              {items.length === 0 ? (
                 <tr>
-                  <td colSpan="2" className="text-center text-muted">
-                    No items are out of stock.
+                  <td colSpan="3" className="text-center text-muted">
+                    No kitchen items available
                   </td>
                 </tr>
               ) : (
-                outOfStockItems.map((item) => (
+                items.map((item) => (
                   <tr key={item.id}>
 
-                    <td>{item.name}</td>
+  <td>{item.name}</td>
 
-                    <td >
-                      <>
-  <button
-    className="btn btn-primary btn-sm px-3"
-    onClick={() => handleRequest(item)}
-  >
-    Request
-  </button>
+  <td className="text-center">
+    {item.status === "Available" ? (
+      <span className="badge bg-success">
+        Available
+      </span>
+    ) : (
+      <span className="badge bg-warning text-dark">
+        Requested
+      </span>
+    )}
+  </td>
 
-  {requests.some(
-    (request) =>
-      request.itemId === item.id &&
-      request.status === "Pending"
-  ) && (
-    <small
-      className="ms-2 text-muted"
-      style={{ fontStyle: "italic" }}
-    >
-      (requested)
-    </small>
-  )}
-</>
-                    </td>
+  <td className="text-center">
+    {item.status === "Available" ? (
+      <button
+        className="btn btn-primary btn-sm"
+        style={{ minWidth: "170px" }}
+        onClick={() => handleRequest(item)}
+      >
+        Add to Shopping List
+      </button>
+    ) : (
+      <button
+        className="btn btn-secondary btn-sm"
+        style={{ minWidth: "170px" }}
+        disabled
+      >
+        Already Requested
+      </button>
+    )}
+  </td>
 
-                  </tr>
+</tr>
                 ))
               )}
 
