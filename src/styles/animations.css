@@ -1,0 +1,193 @@
+/* ===============================
+   Global Smooth Transitions
+================================ */
+
+* {
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.20s ease;
+}
+
+/* ===============================
+   Buttons
+================================ */
+
+.btn {
+  transition: all 0.20s ease !important;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,.12);
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+/* ===============================
+   Cards
+================================ */
+
+.card {
+  transition: all .25s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0,0,0,.12);
+}
+
+/* ===============================
+   Tables
+================================ */
+
+.table tbody tr {
+  transition: all .2s ease;
+}
+
+.table tbody tr:hover {
+  background: #f8fff8;
+}
+
+/* ===============================
+   Navbar
+================================ */
+
+.navbar {
+  transition: all .25s ease;
+}
+
+/* ===============================
+   Sidebar Menu
+================================ */
+
+.nav-link {
+  transition: all .2s ease;
+}
+
+.nav-link:hover {
+  padding-left: 18px;
+}
+
+/* ===============================
+   Badges
+================================ */
+
+.badge {
+  transition: all .2s ease;
+}
+
+/* ===============================
+   Inputs
+================================ */
+
+.form-control {
+  transition: all .2s ease;
+}
+
+.form-control:focus {
+  transform: scale(1.01);
+}
+
+/* ===============================
+   Modal
+================================ */
+
+.modal-content {
+  animation: popup .25s ease;
+}
+
+@keyframes popup {
+
+  from{
+    opacity:0;
+    transform:scale(.92);
+  }
+
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+
+}
+
+/* ========================================
+   BUTTON ANIMATIONS
+======================================== */
+
+.btn {
+  transition: all 0.25s ease !important;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn-success:hover,
+.btn-primary:hover,
+.btn-danger:hover,
+.btn-warning:hover,
+.btn-outline-success:hover,
+.btn-outline-danger:hover,
+.btn-outline-primary:hover,
+.btn-outline-secondary:hover {
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Rounded Buttons */
+
+.btn {
+  border-radius: 10px;
+}
+
+/* Disabled Button */
+
+.btn:disabled {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ========================================
+   TABLE STYLING
+======================================== */
+
+.table-responsive {
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table thead th {
+  background: #f8f9fa;
+  font-weight: 600;
+  border-bottom: 2px solid #dee2e6;
+  vertical-align: middle;
+}
+
+.table tbody td {
+  vertical-align: middle;
+}
+
+.table tbody tr {
+  transition: all .25s ease;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(25, 135, 84, 0.06);
+}
+
+.table td,
+.table th {
+  padding: 0.9rem;
+}

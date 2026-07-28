@@ -1,0 +1,41 @@
+/* Dashboard Cards */
+
+.dashboard-card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.12) !important;
+}
+
+.dashboard-card .icon-box {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: all .35s ease;
+}
+
+.dashboard-card:hover .icon-box {
+  transform: rotate(10deg) scale(1.08);
+}
+
+.dashboard-card h2{
+  transition:.3s;
+}
+
+.dashboard-card:hover h2{
+  color:#198754;
+}
+
+.dashboard-card .card-body{
+  padding:1.6rem;
+}
