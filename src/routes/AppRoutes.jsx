@@ -12,6 +12,7 @@ import PurchaseHistory from "../pages/admin/PurchaseHistory";
 import MotherDashboard from "../pages/mother/Dashboard";
 import MotherShoppingRequests from "../pages/mother/ShoppingRequests";
 import MotherPurchaseHistory from "../pages/mother/PurchaseHistory";
+import MotherAllRequests from "../pages/mother/AllRequests";
 
 // ================= FATHER =================
 import FatherDashboard from "../pages/father/Dashboard";
@@ -89,6 +90,15 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+  path="/mother/all-requests"
+  element={
+    <ProtectedRoute allowedRole="mother">
+      <MotherAllRequests />
+    </ProtectedRoute>
+  }
+/>
 
         <Route
           path="/mother/history"

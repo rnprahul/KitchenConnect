@@ -17,6 +17,7 @@ function ShoppingRequests() {
 
   const [items, setItems] = useState([]);
   const [requests, setRequests] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
 
@@ -71,6 +72,12 @@ function ShoppingRequests() {
     }
   };
 
+  const filteredItems = items.filter((item) =>
+  item.name
+    .toLowerCase()
+    .includes(search.toLowerCase())
+);
+
   
   return (
     <DashboardLayout>
@@ -80,6 +87,22 @@ function ShoppingRequests() {
       </h2>
 
       {/* Kitchen Items */}
+
+      <div className="row mb-3">
+
+  <div className="col-12 col-md-4 ms-md-auto">
+
+    <input
+      type="text"
+      className="form-control"
+      placeholder="🔍 Search Kitchen Item..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+    />
+
+  </div>
+
+</div>
 
       <div className="card mb-4">
 
@@ -106,14 +129,14 @@ function ShoppingRequests() {
 
             <tbody>
 
-              {items.length === 0 ? (
+              {filteredItems.length === 0 ? (
                 <tr>
                   <td colSpan="3" className="text-center text-muted">
                     No kitchen items available
                   </td>
                 </tr>
               ) : (
-                items.map((item) => (
+                filteredItems.map((item) => (
                   <tr key={item.id}>
 
   <td>{item.name}</td>

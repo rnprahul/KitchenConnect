@@ -141,16 +141,17 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
             >
 
               <NavLink
-                to={item.path}
-                onClick={() => setSidebarOpen(false)}
-                className={({ isActive }) =>
-                  `nav-link ${
-                    isActive
-                      ? "active bg-success text-white rounded"
-                      : "text-white"
-                  }`
-                }
-              >
+  to={item.path}
+  end={item.path === `/${role}`}
+  onClick={() => setSidebarOpen(false)}
+  className={({ isActive }) =>
+    `nav-link ${
+      isActive
+        ? "active bg-success text-white rounded"
+        : "text-white"
+    }`
+  }
+>
                 <i className={`bi ${item.icon} me-2`}></i>
 
                 {item.name}

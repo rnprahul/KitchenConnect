@@ -7,7 +7,10 @@ import { subscribeToItemsCount } from "../../services/itemService";
 import {
   subscribeToDashboardStats,
   subscribeToRecentActivity,
+  subscribeToRequests,
 } from "../../services/requestService";
+
+import PendingRequestModal from "../../components/dashboard/PendingRequestModal";
 
 function Dashboard() {
   const { user } = useAuth();
@@ -16,21 +19,39 @@ function Dashboard() {
   const [itemsCount, setItemsCount] = useState(0);
 const [pendingCount, setPendingCount] = useState(0);
 const [purchasedCount, setPurchasedCount] = useState(0);
+const [showPendingModal, setShowPendingModal] = useState(false);
+const [pendingRequests, setPendingRequests] = useState([]);
 
 useEffect(() => {
+
   const unsubscribeItems = subscribeToItemsCount((count) => {
     setItemsCount(count);
   });
+
 
   const unsubscribeStats = subscribeToDashboardStats((stats) => {
     setPendingCount(stats.pending);
     setPurchasedCount(stats.purchased);
   });
 
+
+  const unsubscribeRequests = subscribeToRequests((requests) => {
+
+    const pending = requests.filter(
+      (request) => request.status === "Pending"
+    );
+
+    setPendingRequests(pending);
+
+  });
+
+
   return () => {
     unsubscribeItems();
     unsubscribeStats();
+    unsubscribeRequests();
   };
+
 }, []);
 
   const [activities, setActivities] = useState([]);
@@ -76,7 +97,11 @@ useEffect(() => {
       <div className="row g-4 mb-4">
 
         <div className="col-lg-4 col-md-6">
-          <div className="card dashboard-card shadow-sm h-100">
+          <div
+  className="card dashboard-card shadow-sm h-100"
+  style={{ cursor:"pointer" }}
+  onClick={() => navigate("/admin/items")}
+>
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-center">
                 <div>
@@ -94,7 +119,11 @@ useEffect(() => {
         </div>
 
         <div className="col-lg-4 col-md-6">
-          <div className="card dashboard-card shadow-sm h-100">
+          <div
+  className="card dashboard-card shadow-sm h-100"
+  style={{ cursor:"pointer" }}
+  onClick={() => setShowPendingModal(true)}
+>
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-center">
 
@@ -118,7 +147,11 @@ useEffect(() => {
         </div>
 
         <div className="col-lg-4 col-md-6">
-          <div className="card dashboard-card shadow-sm h-100">
+          <div
+  className="card dashboard-card shadow-sm h-100"
+  style={{ cursor:"pointer" }}
+  onClick={() => navigate("/admin/history")}
+>
             <div className="card-body">
 
               <div className="d-flex justify-content-between align-items-center">
@@ -279,6 +312,13 @@ useEffect(() => {
         </div>
 
       </div>
+
+      <PendingRequestModal
+  show={showPendingModal}
+  onClose={() => setShowPendingModal(false)}
+  requests={pendingRequests}
+  showRequester={true}
+/>
 
     </DashboardLayout>
   );

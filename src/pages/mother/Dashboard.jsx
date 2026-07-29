@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+import PendingRequestModal from "../../components/dashboard/PendingRequestModal";
+import { useNavigate } from "react-router-dom";
 
 import DashboardLayout from "../../components/layout/DashboardLayout";
 
@@ -8,50 +10,62 @@ import {
   getPendingRequestsCount,
   getPurchasedRequestsCount,
   getRecentRequests,
+  getRequestsByUser,
 } from "../../services/requestService";
 
-import { getOutOfStockItems } from "../../services/itemService";
 
 function Dashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const [showPendingModal, setShowPendingModal] = useState(false);
+const [pendingRequests, setPendingRequests] = useState([]);
 
   const [stats, setStats] = useState({
     total: 0,
     pending: 0,
     purchased: 0,
-    outOfStock: 0,
   });
 
   const [recentRequests, setRecentRequests] = useState([]);
 
   useEffect(() => {
+
+  if(user){
     loadDashboard();
-  }, []);
+  }
+
+}, [user]);
 
   const loadDashboard = async () => {
     try {
       const [
-        total,
-        pending,
-        purchased,
-        outOfStock,
-        recent,
-      ] = await Promise.all([
-        getTotalRequests(),
-        getPendingRequestsCount(),
-        getPurchasedRequestsCount(),
-        getOutOfStockItems(),
-        getRecentRequests(),
-      ]);
+  total,
+  pending,
+  purchased,
+  recent,
+] = await Promise.all([
+  getTotalRequests(),
+  getPendingRequestsCount(),
+  getPurchasedRequestsCount(),
+  getRecentRequests(),
+]);
 
       setStats({
         total,
         pending,
         purchased,
-        outOfStock,
       });
 
       setRecentRequests(recent);
+
+      const userRequests = await getRequestsByUser(user.name);
+
+setPendingRequests(
+  userRequests.filter(
+    (request) => request.status === "Pending"
+  )
+);
 
     } catch (error) {
       console.error(error);
@@ -81,9 +95,13 @@ function Dashboard() {
 
       <div className="row g-4 mb-4">
 
-        <div className="col-md-3">
+        <div className="col-md-4">
 
-          <div className="card dashboard-card shadow-sm">
+          <div
+  className="card dashboard-card shadow-sm"
+  style={{ cursor: "pointer" }}
+  onClick={() => navigate("/mother/all-requests")}
+>
 
             <div className="card-body">
 
@@ -101,9 +119,13 @@ function Dashboard() {
 
         </div>
 
-        <div className="col-md-3">
+        <div className="col-md-4">
 
-          <div className="card dashboard-card shadow-sm border-0">
+          <div
+  className="card dashboard-card shadow-sm border-0"
+  style={{ cursor: "pointer" }}
+  onClick={() => setShowPendingModal(true)}
+>
 
             <div className="card-body">
 
@@ -121,9 +143,13 @@ function Dashboard() {
 
         </div>
 
-        <div className="col-md-3">
+        <div className="col-md-4">
 
-          <div className="card dashboard-card shadow-sm">
+          <div
+  className="card dashboard-card shadow-sm"
+  style={{ cursor: "pointer" }}
+  onClick={() => navigate("/mother/history")}
+  >
 
             <div className="card-body">
 
@@ -141,25 +167,6 @@ function Dashboard() {
 
         </div>
 
-        <div className="col-md-3">
-
-          <div className="card dashboard-card shadow-sm">
-
-            <div className="card-body">
-
-              <h6 className="text-muted">
-                Out of Stock
-              </h6>
-
-              <h2 className="fw-bold text-danger">
-                {stats.outOfStock}
-              </h2>
-
-            </div>
-
-          </div>
-
-        </div>
 
       </div>
 
@@ -244,6 +251,12 @@ function Dashboard() {
         </div>
 
       </div>
+
+      <PendingRequestModal
+  show={showPendingModal}
+  onClose={() => setShowPendingModal(false)}
+  requests={pendingRequests}
+/>
 
     </DashboardLayout>
   );
