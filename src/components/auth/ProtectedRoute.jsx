@@ -1,17 +1,14 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import Loader from "../common/Loader";
 
 function ProtectedRoute({ children, allowedRole }) {
   const { user, loading } = useAuth();
 
   // Wait until Firebase checks the login state
   if (loading) {
-    return (
-      <div className="d-flex justify-content-center align-items-center vh-100">
-        <h4>Loading...</h4>
-      </div>
-    );
-  }
+  return <Loader />;
+}
 
   // User not logged in
   if (!user) {

@@ -236,14 +236,18 @@ export const subscribeToDashboardStats = (callback) => {
     }));
 
     callback({
-      pending: requests.filter(
-        (request) => request.status === "Pending"
-      ).length,
 
-      purchased: requests.filter(
-        (request) => request.status === "Purchased"
-      ).length,
-    });
+  total: requests.length,
+
+  pending: requests.filter(
+    (request) => request.status === "Pending"
+  ).length,
+
+  purchased: requests.filter(
+    (request) => request.status === "Purchased"
+  ).length,
+
+});
 
   });
 };

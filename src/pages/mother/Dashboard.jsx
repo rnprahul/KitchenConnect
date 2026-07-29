@@ -6,10 +6,8 @@ import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 
 import {
-  getTotalRequests,
-  getPendingRequestsCount,
-  getPurchasedRequestsCount,
-  getRecentRequests,
+  subscribeToDashboardStats,
+  subscribeToRecentActivity,
   getRequestsByUser,
 } from "../../services/requestService";
 
@@ -31,46 +29,60 @@ const [pendingRequests, setPendingRequests] = useState([]);
 
   useEffect(() => {
 
-  if(user){
-    loadDashboard();
-  }
+  if (!user) return;
+
+
+  const unsubscribeStats =
+    subscribeToDashboardStats((statsData) => {
+
+      setStats({
+        total: statsData.total,
+        pending: statsData.pending,
+        purchased: statsData.purchased,
+      });
+
+    });
+
+
+  const unsubscribeRecent =
+    subscribeToRecentActivity((data) => {
+
+      setRecentRequests(
+        data.slice(0,5)
+      );
+
+    });
+
+
+  const loadPendingRequests = async () => {
+
+    const userRequests =
+      await getRequestsByUser(user.name);
+
+
+    setPendingRequests(
+      userRequests.filter(
+        (request) =>
+          request.status === "Pending"
+      )
+    );
+
+  };
+
+
+  loadPendingRequests();
+
+
+  return () => {
+
+    unsubscribeStats();
+    unsubscribeRecent();
+
+  };
+
 
 }, [user]);
 
-  const loadDashboard = async () => {
-    try {
-      const [
-  total,
-  pending,
-  purchased,
-  recent,
-] = await Promise.all([
-  getTotalRequests(),
-  getPendingRequestsCount(),
-  getPurchasedRequestsCount(),
-  getRecentRequests(),
-]);
-
-      setStats({
-        total,
-        pending,
-        purchased,
-      });
-
-      setRecentRequests(recent);
-
-      const userRequests = await getRequestsByUser(user.name);
-
-setPendingRequests(
-  userRequests.filter(
-    (request) => request.status === "Pending"
-  )
-);
-
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <DashboardLayout>
