@@ -107,7 +107,10 @@ function KitchenItems() {
 );
 
   return (
-    <DashboardLayout>
+    <DashboardLayout
+  search={search}
+  setSearch={setSearch}
+>
 
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-4">
 
@@ -130,22 +133,6 @@ function KitchenItems() {
         </button>
 
       </div>
-
-      <div className="row mb-3">
-
-  <div className="col-12 col-md-4 ms-md-auto">
-
-    <input
-      type="text"
-      className="form-control"
-      placeholder="🔍 Search Kitchen Item..."
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-    />
-
-  </div>
-
-</div>
 
       <ItemTable
         items={filteredItems}

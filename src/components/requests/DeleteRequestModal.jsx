@@ -32,7 +32,7 @@ function DeleteRequestModal({
             <div className="modal-header bg-danger text-white">
 
               <h5 className="modal-title">
-                Delete Shopping Request
+                Remove Shopping Request
               </h5>
 
               <button
@@ -59,7 +59,7 @@ function DeleteRequestModal({
                 </h4>
 
                 <p className="text-muted mb-0">
-                  You are about to delete the shopping request for:
+                  You are about to remove the shopping request for:
                 </p>
 
                 <h5 className="fw-bold mt-3">
@@ -67,7 +67,7 @@ function DeleteRequestModal({
                 </h5>
 
                 <p className="text-danger mt-3 mb-0">
-                  This action cannot be undone.
+                  The kitchen item will become available again.
                 </p>
 
               </div>
@@ -87,10 +87,10 @@ function DeleteRequestModal({
 
               <button
                 className="btn btn-danger"
-                onClick={() => onConfirm(request.id)}
+                onClick={() => onConfirm(request)}
               >
                 <i className="bi bi-trash me-2"></i>
-                Delete
+                Remove
               </button>
 
             </div>

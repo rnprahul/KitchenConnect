@@ -12,13 +12,19 @@ import {
   clearNotifications,
 } from "../../services/notificationService";
 
-function Navbar({ sidebarOpen, setSidebarOpen }) {
+function Navbar({
+  sidebarOpen,
+  setSidebarOpen,
+  search = "",
+  setSearch = null,
+}) {
   const navigate = useNavigate();
   const { user } = useAuth();
 
   const [notificationCount, setNotificationCount] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
 
   // Notification Badge Count
   useEffect(() => {
@@ -73,6 +79,25 @@ function Navbar({ sidebarOpen, setSidebarOpen }) {
     }
   };
 
+  const handleLogoClick = () => {
+  switch (user?.role) {
+    case "admin":
+      navigate("/admin");
+      break;
+
+    case "mother":
+      navigate("/mother");
+      break;
+
+    case "father":
+      navigate("/father");
+      break;
+
+    default:
+      navigate("/");
+  }
+};
+
   const handleClearNotifications = async () => {
   try {
     await clearNotifications(user.role);
@@ -83,10 +108,16 @@ function Navbar({ sidebarOpen, setSidebarOpen }) {
 };
 
   return (
+    <>
     <nav
-      className="navbar navbar-expand-lg bg-white shadow-sm px-2 px-lg-4"
-      style={{ height: "75px" }}
-    >
+  className="navbar navbar-expand-lg bg-white shadow-sm px-2 px-lg-4"
+  style={{
+    height: "75px",
+    position: "sticky",
+    top: 0,
+    zIndex: 1030,
+  }}
+>
       <div className="container-fluid d-flex justify-content-between align-items-center flex-nowrap">
 
         {/* Left Side */}
@@ -103,23 +134,49 @@ function Navbar({ sidebarOpen, setSidebarOpen }) {
             <i className="bi bi-list fs-4"></i>
           </button>
 
-          <div>
-            <h4
-  className="mb-0 fw-bold text-success"
+          <div
+  onClick={handleLogoClick}
+  title="Go to Dashboard"
   style={{
-    fontSize: window.innerWidth < 768 ? "1.15rem" : "1.5rem",
-    whiteSpace: "nowrap",
+    cursor: "pointer",
   }}
 >
-  KitchenConnect
-</h4>
+  <h4
+    className="mb-0 fw-bold text-success"
+    style={{
+      fontSize: window.innerWidth < 768 ? "1.15rem" : "1.5rem",
+      whiteSpace: "nowrap",
+    }}
+  >
+    KitchenConnect
+  </h4>
 
-            <small className="text-muted d-none d-md-block">
-              {dashboardTitle()}
-            </small>
-          </div>
+  <small className="text-muted d-none d-md-block">
+    {dashboardTitle()}
+  </small>
+</div>
 
         </div>
+
+        {/* Search Bar */}
+
+{setSearch && (
+  <div
+    className="d-none d-md-block"
+    style={{
+      width: "320px",
+      marginLeft: "40px",
+    }}
+  >
+    <input
+      type="text"
+      className="form-control"
+      placeholder="🔍 Search..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+    />
+  </div>
+)}
 
         {/* Right Side */}
         <div
@@ -129,6 +186,18 @@ function Navbar({ sidebarOpen, setSidebarOpen }) {
     flexShrink: 0,
   }}
 >
+
+  {/* Mobile Search */}
+
+{setSearch && (
+  <button
+    className="btn btn-light d-md-none"
+    title="Search"
+    onClick={() => setShowMobileSearch(!showMobileSearch)}
+  >
+    <i className="bi bi-search"></i>
+  </button>
+)}
 
           {/* Notification */}
           <div className="position-relative me-3">
@@ -202,6 +271,28 @@ function Navbar({ sidebarOpen, setSidebarOpen }) {
 
       </div>
     </nav>
+
+    {setSearch && showMobileSearch && (
+      <div
+        className="d-md-none bg-white border-bottom p-2 shadow-sm"
+        style={{
+          position: "sticky",
+          top: "75px",
+          zIndex: 1029,
+        }}
+      >
+        <input
+          type="text"
+          className="form-control"
+          placeholder="🔍 Search..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          autoFocus
+        />
+      </div>
+    )}
+
+    </>
   );
 }
 

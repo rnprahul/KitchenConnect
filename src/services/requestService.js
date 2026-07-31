@@ -121,6 +121,34 @@ export const deleteRequest = async (id) => {
   await deleteDoc(requestRef);
 };
 
+// Remove Pending Request
+export const removePendingRequest = async (request) => {
+  // Delete the shopping request
+  await deleteDoc(
+    doc(db, "shoppingRequests", request.id)
+  );
+
+  // Make the kitchen item available again
+  await updateItemStatus(
+    request.itemId,
+    "Available"
+  );
+
+  // Notify Admin
+  await addNotification({
+    role: "admin",
+    icon: "❌",
+    title: `${request.requestedBy} removed ${request.itemName} from shopping list`,
+  });
+
+  // Notify Father
+  await addNotification({
+    role: "father",
+    icon: "❌",
+    title: `${request.requestedBy} removed ${request.itemName} from shopping list`,
+  });
+};
+
 // Total Requests
 export const getTotalRequests = async () => {
   const snapshot = await getDocs(requestsCollection);

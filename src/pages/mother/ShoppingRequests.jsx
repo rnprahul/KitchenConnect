@@ -6,9 +6,11 @@ import DashboardLayout from "../../components/layout/DashboardLayout";
 import { useAuth } from "../../context/AuthContext";
 
 import { subscribeToItems, } from "../../services/itemService";
+import DeleteRequestModal from "../../components/requests/DeleteRequestModal";
 
 import {
   addRequest,
+  removePendingRequest,
   subscribeToRequestsByUser,
 } from "../../services/requestService";
 
@@ -18,6 +20,8 @@ function ShoppingRequests() {
   const [items, setItems] = useState([]);
   const [requests, setRequests] = useState([]);
   const [search, setSearch] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+const [selectedRequest, setSelectedRequest] = useState(null);
 
   useEffect(() => {
 
@@ -72,6 +76,21 @@ function ShoppingRequests() {
     }
   };
 
+  const handleRemoveRequest = async (request) => {
+  try {
+    await removePendingRequest(request);
+
+    toast.success("Request removed successfully.");
+
+    setShowDeleteModal(false);
+    setSelectedRequest(null);
+
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to remove request.");
+  }
+};
+
   const filteredItems = items.filter((item) =>
   item.name
     .toLowerCase()
@@ -80,29 +99,16 @@ function ShoppingRequests() {
 
   
   return (
-    <DashboardLayout>
+    <DashboardLayout
+  search={search}
+  setSearch={setSearch}
+>
 
       <h2 className="mb-4 text-center text-md-start">
         Shopping Requests
       </h2>
 
       {/* Kitchen Items */}
-
-      <div className="row mb-3">
-
-  <div className="col-12 col-md-4 ms-md-auto">
-
-    <input
-      type="text"
-      className="form-control"
-      placeholder="🔍 Search Kitchen Item..."
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-    />
-
-  </div>
-
-</div>
 
       <div className="card mb-4">
 
@@ -206,6 +212,7 @@ function ShoppingRequests() {
               <tr>
                 <th>Item</th>
                 <th>Status</th>
+                <th className="text-center">Action</th>
               </tr>
 
             </thead>
@@ -214,7 +221,7 @@ function ShoppingRequests() {
 
               {requests.length === 0 ? (
                 <tr>
-                  <td colSpan="2" className="text-center text-muted">
+                  <td colSpan="3" className="text-center text-muted">
                     No requests yet.
                   </td>
                 </tr>
@@ -225,16 +232,35 @@ function ShoppingRequests() {
                     <td>{request.itemName}</td>
 
                     <td>
-                      {request.status === "Pending" ? (
-                        <span className="badge bg-warning text-dark">
-                          Pending
-                        </span>
-                      ) : (
-                        <span className="badge bg-success">
-                          Purchased
-                        </span>
-                      )}
-                    </td>
+  {request.status === "Pending" ? (
+    <span className="badge bg-warning text-dark">
+      Pending
+    </span>
+  ) : (
+    <span className="badge bg-success">
+      Purchased
+    </span>
+  )}
+</td>
+
+<td className="text-center">
+  {request.status === "Pending" ? (
+    <button
+      className="btn btn-outline-danger btn-sm"
+      onClick={() => {
+  setSelectedRequest(request);
+  setShowDeleteModal(true);
+}}
+    >
+      <i className="bi bi-trash me-1"></i>
+      Remove
+    </button>
+  ) : (
+    <span className="badge bg-secondary">
+  Completed
+</span>
+  )}
+</td>
 
                   </tr>
                 ))
@@ -248,6 +274,16 @@ function ShoppingRequests() {
         </div>
 
       </div>
+
+      <DeleteRequestModal
+  show={showDeleteModal}
+  request={selectedRequest}
+  onClose={() => {
+    setShowDeleteModal(false);
+    setSelectedRequest(null);
+  }}
+  onConfirm={handleRemoveRequest}
+/>
 
     </DashboardLayout>
   );

@@ -7,16 +7,13 @@ function ItemFormModal({
   item,
 }) {
   const [name, setName] = useState("");
-  const [status, setStatus] = useState("Available");
 
   useEffect(() => {
     if (item) {
-      setName(item.name);
-      setStatus(item.status);
-    } else {
-      setName("");
-      setStatus("Available");
-    }
+  setName(item.name);
+} else {
+  setName("");
+}
   }, [item, show]);
 
   if (!show) return null;
@@ -28,7 +25,6 @@ function ItemFormModal({
 
     onSave({
       name: name.trim(),
-      status,
     });
   };
 
@@ -81,27 +77,6 @@ function ItemFormModal({
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
-                </div>
-
-                {/* Status */}
-                <div className="mb-3">
-                  <label className="form-label">
-                    Status
-                  </label>
-
-                  <select
-                    className="form-select"
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                  >
-                    <option value="Available">
-                      Available
-                    </option>
-
-                    <option value="Out of Stock">
-                      Out of Stock
-                    </option>
-                  </select>
                 </div>
 
               </div>

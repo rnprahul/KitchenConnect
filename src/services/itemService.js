@@ -19,6 +19,9 @@ const itemsCollection = collection(db, "items");
 export const addItem = async (itemData) => {
   await addDoc(itemsCollection, {
     ...itemData,
+
+    status: "Available",
+
     createdAt: serverTimestamp(),
   });
 };

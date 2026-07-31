@@ -2,7 +2,11 @@ import { useState } from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
-function DashboardLayout({ children }) {
+function DashboardLayout({
+  children,
+  search,
+  setSearch,
+}) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -24,12 +28,19 @@ function DashboardLayout({ children }) {
       >
         {/* Navbar */}
         <Navbar
-          sidebarOpen={sidebarOpen}
-          setSidebarOpen={setSidebarOpen}
-        />
+  sidebarOpen={sidebarOpen}
+  setSidebarOpen={setSidebarOpen}
+  search={search}
+  setSearch={setSearch}
+/>
 
         {/* Page Content */}
-        <div className="container-fluid p-4">
+        <div
+  className="container-fluid p-4"
+  style={{
+    paddingTop: "24px",
+  }}
+>
           {children}
         </div>
       </div>
