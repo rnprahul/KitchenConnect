@@ -26,16 +26,16 @@ function Login() {
 
       switch (result.profile.role) {
         case "admin":
-          navigate("/admin");
-          break;
+  navigate("/admin", { replace: true });
+  break;
 
-        case "mother":
-          navigate("/mother");
-          break;
+case "mother":
+  navigate("/mother", { replace: true });
+  break;
 
-        case "father":
-          navigate("/father");
-          break;
+case "father":
+  navigate("/father", { replace: true });
+  break;
 
         default:
           toast.error("Unknown user role");
