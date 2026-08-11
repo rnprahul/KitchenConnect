@@ -1,16 +1,72 @@
-# React + Vite
+# 🍳 KitchenConnect
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> A role-based household kitchen inventory and shopping management web application.
 
-Currently, two official plugins are available:
+KitchenConnect helps coordinate household shopping between the kitchen and supermarket by connecting **Mother, Father, and Admin** through dedicated dashboards.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Features
 
-## React Compiler
+### 👩‍🍳 Mother
+- View available kitchen items
+- Select items that are out of stock
+- Send shopping requests to Father
+- Track request status
+- Receive purchase completion updates
+- View purchase history
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🛒 Father
+- View incoming shopping requests
+- Track requested items
+- Update shopping status
+- Mark purchases as completed
 
-## Expanding the ESLint configuration
+### 👨‍💼 Admin
+- Manage kitchen items
+- Manage item categories
+- Create shopping requests
+- Monitor application activity
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 🔐 Authentication & Access Control
+- Firebase Authentication
+- Role-based access
+- Protected routes
+- Separate dashboards for each user role
+
+## 📊 Request Status
+
+| Status | Description |
+|---|---|
+| 🟡 Pending | Request created and waiting for action |
+| 🔵 Shopping in Progress | Shopping request is being processed |
+| 🟢 Purchase Completed | Requested items have been purchased |
+
+## 🛠️ Tech Stack
+
+- **Frontend:** React, Vite
+- **Styling:** Bootstrap, CSS
+- **Backend Services:** Firebase
+- **Authentication:** Firebase Authentication
+- **Database:** Cloud Firestore
+- **Version Control:** Git & GitHub
+
+## 📁 Project Structure
+
+```text
+KitchenConnect/
+├── public/
+├── src/
+│   ├── assets/
+│   ├── components/
+│   ├── context/
+│   ├── firebase/
+│   ├── layouts/
+│   ├── pages/
+│   ├── routes/
+│   ├── services/
+│   ├── styles/
+│   └── utils/
+├── .gitignore
+├── firebase.json
+├── index.html
+├── package.json
+└── vite.config.js
