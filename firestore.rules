@@ -1,0 +1,218 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============================================================
+    // HELPER FUNCTIONS
+    // ============================================================
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function userRole() {
+      return get(
+        /databases/$(database)/documents/users/$(request.auth.uid)
+      ).data.role;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && userRole() == "admin";
+    }
+
+    function isMother() {
+      return isSignedIn() && userRole() == "mother";
+    }
+
+    function isFather() {
+      return isSignedIn() && userRole() == "father";
+    }
+
+
+    // ============================================================
+    // USERS
+    // ============================================================
+
+    match /users/{userId} {
+
+      // Users can read their own profile.
+      // Admin can read all profiles.
+      allow read: if isSignedIn() &&
+        (
+          request.auth.uid == userId ||
+          isAdmin()
+        );
+
+      // User profiles are not modified by the application.
+      allow create, update, delete: if false;
+    }
+
+
+    // ============================================================
+    // ITEMS
+    // ============================================================
+
+    match /items/{itemId} {
+
+      // All logged-in users can view kitchen items.
+      allow read: if isSignedIn();
+
+      // Only Admin can create items.
+      allow create: if isAdmin();
+
+      // Admin can update anything.
+      //
+      // Mother:
+      // Available -> Requested
+      //
+      // Father:
+      // Requested -> Available
+      allow update: if
+        isAdmin()
+
+        ||
+
+        (
+          isMother() &&
+          resource.data.status == "Available" &&
+          request.resource.data.status == "Requested" &&
+          request.resource.data.diff(resource.data)
+            .affectedKeys()
+            .hasOnly(["status"])
+        )
+
+        ||
+
+        (
+          isFather() &&
+          resource.data.status == "Requested" &&
+          request.resource.data.status == "Available" &&
+          request.resource.data.diff(resource.data)
+            .affectedKeys()
+            .hasOnly(["status"])
+        );
+
+      // Only Admin can delete items.
+      allow delete: if isAdmin();
+    }
+
+
+    // ============================================================
+    // SHOPPING REQUESTS
+    // ============================================================
+
+    match /shoppingRequests/{requestId} {
+
+      // Admin, Mother and Father can read requests.
+      allow read: if isSignedIn();
+
+
+      // Admin and Mother can create requests.
+      //
+      // The request must belong to the logged-in user.
+      allow create: if
+        (isAdmin() || isMother()) &&
+        request.resource.data.requestedById == request.auth.uid &&
+        request.resource.data.status == "Pending" &&
+        request.resource.data.purchasedAt == null &&
+        request.resource.data.keys().hasAll([
+          "itemId",
+          "itemName",
+          "requestedBy",
+          "requestedById",
+          "status",
+          "requestedAt",
+          "purchasedAt"
+        ]);
+
+
+      // Admin can update requests.
+      //
+      // Father can:
+      // Pending -> Purchased
+      //
+      // We intentionally keep purchasedBy as the user's NAME
+      // because that is how the existing application displays it.
+      allow update: if
+        isAdmin()
+
+        ||
+
+        (
+          isFather() &&
+          resource.data.status == "Pending" &&
+          request.resource.data.status == "Purchased" &&
+          request.resource.data.diff(resource.data)
+            .affectedKeys()
+            .hasOnly([
+              "status",
+              "purchasedAt",
+              "purchasedBy"
+            ])
+        );
+
+
+      // Admin can delete any request.
+      //
+      // Mother can delete only her own Pending request.
+      allow delete: if
+        isAdmin()
+
+        ||
+
+        (
+          isMother() &&
+          resource.data.requestedById == request.auth.uid &&
+          resource.data.status == "Pending"
+        );
+    }
+
+
+    // ============================================================
+    // NOTIFICATIONS
+    // ============================================================
+
+    match /notifications/{notificationId} {
+
+      // Users can only read notifications belonging
+      // to their own role.
+      //
+      // notificationService uses:
+      // where("role", "==", role)
+      allow read: if
+        isSignedIn() &&
+        resource.data.role == userRole();
+
+
+      // Current application creates notifications directly
+      // from the client.
+      allow create: if
+        isSignedIn() &&
+        request.resource.data.role in [
+          "admin",
+          "mother",
+          "father"
+        ];
+
+
+      // Users can delete only their own-role notifications.
+      allow delete: if
+        isSignedIn() &&
+        resource.data.role == userRole();
+
+
+      // Notifications cannot be edited.
+      allow update: if false;
+    }
+
+
+    // ============================================================
+    // DENY EVERYTHING ELSE
+    // ============================================================
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

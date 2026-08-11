@@ -12,30 +12,43 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        try {
-          const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      async (firebaseUser) => {
 
-          if (userDoc.exists()) {
-            setUser({
-              uid: firebaseUser.uid,
-              email: firebaseUser.email,
-              ...userDoc.data(),
-            });
-          } else {
+        console.log("Auth State Changed:", firebaseUser);
+
+        if (firebaseUser) {
+
+          console.log("User restored:", firebaseUser.email);
+
+          try {
+            const userDoc = await getDoc(
+              doc(db, "users", firebaseUser.uid)
+            );
+
+            if (userDoc.exists()) {
+              setUser({
+                uid: firebaseUser.uid,
+                email: firebaseUser.email,
+                ...userDoc.data(),
+              });
+            } else {
+              setUser(null);
+            }
+
+          } catch (error) {
+            console.error("Error loading user:", error);
             setUser(null);
           }
-        } catch (error) {
-          console.error("Error loading user:", error);
+
+        } else {
           setUser(null);
         }
-      } else {
-        setUser(null);
-      }
 
-      setLoading(false);
-    });
+        setLoading(false);
+      }
+    );
 
     return () => unsubscribe();
   }, []);

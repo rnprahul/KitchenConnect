@@ -2,21 +2,16 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import Loader from "../common/Loader";
 
-function ProtectedRoute({ children, allowedRole }) {
+function PublicRoute({ children }) {
   const { user, loading } = useAuth();
 
-  // Wait until Firebase checks the login state
+  // Wait until Firebase finishes checking
   if (loading) {
     return <Loader />;
   }
 
-  // User not logged in
-  if (!user) {
-    return <Navigate to="/" replace />;
-  }
-
-  // User logged in but wrong role
-  if (user.role !== allowedRole) {
+  // Already logged in
+  if (user) {
     switch (user.role) {
       case "admin":
         return <Navigate to="/admin" replace />;
@@ -32,7 +27,8 @@ function ProtectedRoute({ children, allowedRole }) {
     }
   }
 
+  // Not logged in
   return children;
 }
 
-export default ProtectedRoute;
+export default PublicRoute;

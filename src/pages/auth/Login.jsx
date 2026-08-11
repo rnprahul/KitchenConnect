@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 import { login } from "../../services/authService";
+import { useAuth } from "../../context/AuthContext";
 
 import logo from "../../assets/images/logo.png";
 
@@ -10,11 +11,35 @@ import "./Login.css";
 
 function Login() {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+  if (authLoading) return;
+
+  if (!user) return;
+
+  switch (user.role) {
+    case "admin":
+      navigate("/admin", { replace: true });
+      break;
+
+    case "mother":
+      navigate("/mother", { replace: true });
+      break;
+
+    case "father":
+      navigate("/father", { replace: true });
+      break;
+
+    default:
+      break;
+  }
+}, [user, authLoading, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();

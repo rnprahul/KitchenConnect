@@ -7,6 +7,7 @@ import {
   orderBy,
   query,
   serverTimestamp,
+  where,
 } from "firebase/firestore";
 
 import db from "../firebase/firestore";
@@ -34,18 +35,15 @@ export const subscribeToNotifications = (
 ) => {
   const q = query(
     notificationsCollection,
+    where("role", "==", role),
     orderBy("createdAt", "desc")
   );
 
   return onSnapshot(q, (snapshot) => {
-    const notifications = snapshot.docs
-      .map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }))
-      .filter(
-        (notification) => notification.role === role
-      );
+    const notifications = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
     callback(notifications);
   });
@@ -58,13 +56,12 @@ export const subscribeToNotificationCount = (
 ) => {
   const q = query(
     notificationsCollection,
+    where("role", "==", role),
     orderBy("createdAt", "desc")
   );
 
   return onSnapshot(q, (snapshot) => {
-    const count = snapshot.docs.filter(
-      (doc) => doc.data().role === role
-    ).length;
+    const count = snapshot.size;
 
     callback(count);
   });
@@ -72,14 +69,15 @@ export const subscribeToNotificationCount = (
 
 // Clear Notifications
 export const clearNotifications = async (role) => {
-  const snapshot = await getDocs(notificationsCollection);
-
-  const notifications = snapshot.docs.filter(
-    (doc) => doc.data().role === role
+  const q = query(
+    notificationsCollection,
+    where("role", "==", role)
   );
 
+  const snapshot = await getDocs(q);
+
   await Promise.all(
-    notifications.map((notification) =>
+    snapshot.docs.map((notification) =>
       deleteDoc(notification.ref)
     )
   );

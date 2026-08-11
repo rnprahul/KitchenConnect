@@ -20,6 +20,7 @@ import FatherDashboard from "../pages/father/Dashboard";
 // ================= COMMON =================
 import NotFound from "../pages/NotFound";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
+import PublicRoute from "../components/auth/PublicRoute";
 
 function AppRoutes() {
   return (
@@ -29,9 +30,13 @@ function AppRoutes() {
         {/* ================= PUBLIC ================= */}
 
         <Route
-          path="/"
-          element={<Login />}
-        />
+  path="/"
+  element={
+    <PublicRoute>
+      <Login />
+    </PublicRoute>
+  }
+/>
 
         {/* ================= ADMIN ================= */}
 
