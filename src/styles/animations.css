@@ -1,193 +1,113 @@
-/* ===============================
-   Global Smooth Transitions
-================================ */
+/* ==========================================================================
+   KitchenConnect - Smooth Glassmorphic Animations & Micro-Interactions
+   ========================================================================== */
 
-* {
-  transition:
-    background-color 0.25s ease,
-    color 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease,
-    transform 0.20s ease;
-}
-
-/* ===============================
-   Buttons
-================================ */
-
+/* Button Micro-Interactions */
 .btn {
-  transition: all 0.20s ease !important;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(0,0,0,.12);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .btn:active {
-  transform: scale(0.96);
+  transform: scale(0.96) !important;
 }
 
-/* ===============================
-   Cards
-================================ */
-
-.card {
-  transition: all .25s ease;
+/* Card Hover 3D Glass Effect */
+.card,
+.dashboard-card {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 28px rgba(0,0,0,.12);
-}
-
-/* ===============================
-   Tables
-================================ */
-
-.table tbody tr {
-  transition: all .2s ease;
-}
-
-.table tbody tr:hover {
-  background: #f8fff8;
-}
-
-/* ===============================
-   Navbar
-================================ */
-
+/* Navbar Transition */
 .navbar {
-  transition: all .25s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ===============================
-   Sidebar Menu
-================================ */
-
-.nav-link {
-  transition: all .2s ease;
-}
-
-.nav-link:hover {
-  padding-left: 18px;
-}
-
-/* ===============================
-   Badges
-================================ */
-
-.badge {
-  transition: all .2s ease;
-}
-
-/* ===============================
-   Inputs
-================================ */
-
-.form-control {
-  transition: all .2s ease;
-}
-
-.form-control:focus {
-  transform: scale(1.01);
-}
-
-/* ===============================
-   Modal
-================================ */
-
+/* Modal Popup & Blur Animation */
 .modal-content {
-  animation: popup .25s ease;
+  animation: glassModalPopup 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes popup {
-
-  from{
-    opacity:0;
-    transform:scale(.92);
+@keyframes glassModalPopup {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(16px);
   }
-
-  to{
-    opacity:1;
-    transform:scale(1);
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
-
 }
 
-/* ========================================
-   BUTTON ANIMATIONS
-======================================== */
-
-.btn {
-  transition: all 0.25s ease !important;
+/* Table Row Hover */
+.table tbody tr {
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.btn:hover {
-  transform: translateY(-2px);
+/* Pulse Animation for glowing badges and dots */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(16, 185, 129, 0.8), 0 0 30px rgba(52, 211, 153, 0.4);
+  }
 }
 
-.btn:active {
-  transform: scale(0.96);
+.pulse-emerald {
+  animation: pulseGlow 2.5s infinite ease-in-out;
 }
 
-.btn-success:hover,
-.btn-primary:hover,
-.btn-danger:hover,
-.btn-warning:hover,
-.btn-outline-success:hover,
-.btn-outline-danger:hover,
-.btn-outline-primary:hover,
-.btn-outline-secondary:hover {
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+/* Shimmer reflection */
+@keyframes shimmerReflection {
+  0% {
+    transform: translateX(-100%) rotate(25deg);
+  }
+  100% {
+    transform: translateX(200%) rotate(25deg);
+  }
 }
 
-/* Rounded Buttons */
-
-.btn {
-  border-radius: 10px;
-}
-
-/* Disabled Button */
-
-.btn:disabled {
-  transform: none !important;
-  box-shadow: none !important;
-}
-
-/* ========================================
-   TABLE STYLING
-======================================== */
-
-.table-responsive {
-  border-radius: 14px;
+.glass-shimmer {
+  position: relative;
   overflow: hidden;
 }
 
-.table {
-  margin-bottom: 0;
+.glass-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 65%
+  );
+  transform: translateX(-100%) rotate(25deg);
+  pointer-events: none;
 }
 
-.table thead th {
-  background: #f8f9fa;
-  font-weight: 600;
-  border-bottom: 2px solid #dee2e6;
-  vertical-align: middle;
+.glass-shimmer:hover::after {
+  animation: shimmerReflection 1.2s ease;
 }
 
-.table tbody td {
-  vertical-align: middle;
+/* Fade in for page contents */
+.page-fade-in {
+  animation: pageFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.table tbody tr {
-  transition: all .25s ease;
-}
-
-.table tbody tr:hover {
-  background-color: rgba(25, 135, 84, 0.06);
-}
-
-.table td,
-.table th {
-  padding: 0.9rem;
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

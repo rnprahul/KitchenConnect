@@ -16,6 +16,8 @@ import MotherAllRequests from "../pages/mother/AllRequests";
 
 // ================= FATHER =================
 import FatherDashboard from "../pages/father/Dashboard";
+import FatherShoppingRequests from "../pages/father/ShoppingRequests";
+import FatherPurchaseHistory from "../pages/father/PurchaseHistory";
 
 // ================= COMMON =================
 import NotFound from "../pages/NotFound";
@@ -121,6 +123,24 @@ function AppRoutes() {
           element={
             <ProtectedRoute allowedRole="father">
               <FatherDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/father/requests"
+          element={
+            <ProtectedRoute allowedRole="father">
+              <FatherShoppingRequests />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/father/history"
+          element={
+            <ProtectedRoute allowedRole="father">
+              <FatherPurchaseHistory />
             </ProtectedRoute>
           }
         />

@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { subscribeToPurchaseHistory } from "../../services/requestService";
 
-function PurchaseHistory() {
+function FatherPurchaseHistory() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -17,15 +18,30 @@ function PurchaseHistory() {
     return () => unsubscribe();
   }, []);
 
+  const filteredHistory = history.filter(
+    (purchase) =>
+      purchase.itemName.toLowerCase().includes(search.toLowerCase()) ||
+      (purchase.requestedBy &&
+        purchase.requestedBy.toLowerCase().includes(search.toLowerCase())) ||
+      (purchase.purchasedBy &&
+        purchase.purchasedBy.toLowerCase().includes(search.toLowerCase()))
+  );
+
   return (
-    <DashboardLayout>
+    <DashboardLayout search={search} setSearch={setSearch}>
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <div className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2" style={{ background: "rgba(59, 130, 246, 0.12)", border: "1px solid rgba(96, 165, 250, 0.3)" }}>
-            <i className="bi bi-clock-history text-primary"></i>
-            <small className="text-primary fw-semibold" style={{ fontSize: "0.8rem" }}>
-              Completed Purchases
+          <div
+            className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2"
+            style={{
+              background: "rgba(16, 185, 129, 0.12)",
+              border: "1px solid rgba(52, 211, 153, 0.3)",
+            }}
+          >
+            <i className="bi bi-clock-history text-emerald"></i>
+            <small className="text-emerald fw-semibold" style={{ fontSize: "0.8rem" }}>
+              Completed Purchases Log
             </small>
           </div>
 
@@ -34,22 +50,27 @@ function PurchaseHistory() {
           </h2>
 
           <p className="text-secondary mb-0" style={{ fontSize: "0.95rem" }}>
-            Complete audit log of all fulfilled kitchen shopping requests.
+            Archive of all grocery items purchased and brought home for the kitchen.
           </p>
         </div>
+
+        <span className="badge bg-success rounded-pill px-3 py-2 fs-6">
+          <i className="bi bi-check2-all me-1"></i>
+          {filteredHistory.length} Total Purchased
+        </span>
       </div>
 
-      {/* History Card */}
+      {/* History Table Card */}
       <div className="card shadow-sm border-0">
         <div className="card-header d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center gap-2">
             <i className="bi bi-receipt text-success"></i>
             <h5 className="mb-0 fw-bold text-light" style={{ fontSize: "1.1rem" }}>
-              Completed Log
+              Purchased Log
             </h5>
           </div>
           <span className="badge bg-secondary rounded-pill">
-            {history.length} Total Purchased
+            {filteredHistory.length} Records
           </span>
         </div>
 
@@ -64,10 +85,10 @@ function PurchaseHistory() {
                 <span className="visually-hidden">Loading...</span>
               </div>
               <p className="mt-3 text-secondary mb-0">
-                Loading Purchase History...
+                Loading purchase records...
               </p>
             </div>
-          ) : history.length === 0 ? (
+          ) : filteredHistory.length === 0 ? (
             <div className="text-center py-5">
               <div
                 className="rounded-circle d-inline-flex justify-content-center align-items-center p-3 mb-3"
@@ -81,7 +102,9 @@ function PurchaseHistory() {
               </div>
               <h5 className="mt-2 text-light fw-bold">No Purchases Yet</h5>
               <p className="text-secondary mb-0" style={{ fontSize: "0.9rem" }}>
-                Completed purchases will appear here as soon as items are bought.
+                {search
+                  ? "No purchase records match your search."
+                  : "Completed grocery purchases will appear here."}
               </p>
             </div>
           ) : (
@@ -98,7 +121,7 @@ function PurchaseHistory() {
                 </thead>
 
                 <tbody>
-                  {history.map((purchase, index) => (
+                  {filteredHistory.map((purchase, index) => (
                     <tr key={purchase.id}>
                       <td className="text-center text-secondary fw-semibold">
                         {index + 1}
@@ -143,6 +166,7 @@ function PurchaseHistory() {
 
                       <td>
                         <span className="badge bg-secondary rounded-pill">
+                          <i className="bi bi-person me-1"></i>
                           {purchase.requestedBy}
                         </span>
                       </td>
@@ -165,4 +189,4 @@ function PurchaseHistory() {
   );
 }
 
-export default PurchaseHistory;
+export default FatherPurchaseHistory;

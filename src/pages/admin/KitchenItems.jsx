@@ -26,15 +26,15 @@ function KitchenItems() {
 
   // Load Items
   useEffect(() => {
-  setLoading(true);
+    setLoading(true);
 
-  const unsubscribe = subscribeToItems((itemsData) => {
-    setItems(itemsData);
-    setLoading(false);
-  });
+    const unsubscribe = subscribeToItems((itemsData) => {
+      setItems(itemsData);
+      setLoading(false);
+    });
 
-  return () => unsubscribe();
-}, []);
+    return () => unsubscribe();
+  }, []);
 
   // Add Item
   const handleAddClick = () => {
@@ -72,7 +72,6 @@ function KitchenItems() {
 
       setShowFormModal(false);
       setSelectedItem(null);
-
     } catch (error) {
       console.error(error);
       toast.error("Operation failed");
@@ -88,12 +87,9 @@ function KitchenItems() {
   const handleDelete = async (id) => {
     try {
       await deleteItem(id);
-
       toast.success("Kitchen item deleted successfully");
-
       setShowDeleteModal(false);
       setSelectedItem(null);
-
     } catch (error) {
       console.error(error);
       toast.error("Delete failed");
@@ -101,39 +97,40 @@ function KitchenItems() {
   };
 
   const filteredItems = items.filter((item) =>
-  item.name
-    .toLowerCase()
-    .includes(search.toLowerCase())
-);
+    item.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
-    <DashboardLayout
-  search={search}
-  setSearch={setSearch}
->
-
+    <DashboardLayout search={search} setSearch={setSearch}>
+      {/* Header Section */}
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-4">
-
         <div>
-          <h2 className="fw-bold mb-1">
+          <div className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2" style={{ background: "rgba(16, 185, 129, 0.12)", border: "1px solid rgba(52, 211, 153, 0.3)" }}>
+            <i className="bi bi-basket2 text-emerald"></i>
+            <small className="text-emerald fw-semibold" style={{ fontSize: "0.8rem" }}>
+              Inventory Management
+            </small>
+          </div>
+
+          <h2 className="fw-bold text-light mb-1">
             Kitchen Items
           </h2>
 
-          <p className="text-muted mb-0">
-            Manage all kitchen items.
+          <p className="text-secondary mb-0" style={{ fontSize: "0.95rem" }}>
+            Track and manage all pantry items and their stock status.
           </p>
         </div>
 
         <button
-          className="btn btn-success px-4"
+          className="btn btn-success px-4 py-2"
           onClick={handleAddClick}
         >
-          <i className="bi bi-plus-circle me-2"></i>
-          Add Item
+          <i className="bi bi-plus-lg me-2"></i>
+          Add New Item
         </button>
-
       </div>
 
+      {/* Items Table */}
       <ItemTable
         items={filteredItems}
         loading={loading}
@@ -141,6 +138,7 @@ function KitchenItems() {
         onDelete={handleDeleteClick}
       />
 
+      {/* Modals */}
       <ItemFormModal
         show={showFormModal}
         onClose={() => {
@@ -160,7 +158,6 @@ function KitchenItems() {
         onConfirm={handleDelete}
         item={selectedItem}
       />
-
     </DashboardLayout>
   );
 }
