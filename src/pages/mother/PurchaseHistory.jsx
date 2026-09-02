@@ -7,8 +7,6 @@ function PurchaseHistory() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-
     const unsubscribe = subscribeToPurchaseHistory((data) => {
       setHistory(data);
       setLoading(false);
@@ -22,137 +20,185 @@ function PurchaseHistory() {
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <div className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2" style={{ background: "rgba(16, 185, 129, 0.12)", border: "1px solid rgba(52, 211, 153, 0.3)" }}>
-            <i className="bi bi-clock-history text-emerald"></i>
-            <small className="text-emerald fw-semibold" style={{ fontSize: "0.8rem" }}>
+          <div
+            className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2"
+            style={{
+              background: "var(--color-sage-tint)",
+              border: "1px solid var(--color-sage-border)",
+            }}
+          >
+            <i className="bi bi-clock-history text-sage"></i>
+            <small className="fw-semibold text-sage" style={{ fontSize: "0.8rem" }}>
               Fulfillment Archive
             </small>
           </div>
 
-          <h2 className="fw-bold text-light mb-1">
+          <h2 className="fw-bold mb-1" style={{ color: "var(--text-main)" }}>
             Purchase History
           </h2>
 
-          <p className="text-secondary mb-0" style={{ fontSize: "0.95rem" }}>
-            View completed kitchen purchases bought for your shopping requests.
+          <p className="text-muted mb-0" style={{ fontSize: "0.95rem" }}>
+            View completed kitchen purchases bought for your family shopping requests.
           </p>
         </div>
       </div>
 
       {/* Purchase History Table Card */}
-      <div className="card shadow-sm border-0">
+      <div className="card">
         <div className="card-header d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center gap-2">
-            <i className="bi bi-receipt text-success"></i>
-            <h5 className="mb-0 fw-bold text-light" style={{ fontSize: "1.1rem" }}>
+            <i className="bi bi-receipt text-sage"></i>
+            <h5 className="mb-0 fw-bold" style={{ fontSize: "1.05rem", color: "var(--text-main)" }}>
               Purchased Items Log
             </h5>
           </div>
-          <span className="badge bg-secondary rounded-pill">
+          <span className="badge bg-secondary">
             {history.length} Total Purchased
           </span>
         </div>
 
-        <div className="card-body p-0">
-          {loading ? (
-            <div className="text-center py-5">
-              <div
-                className="spinner-border text-success"
-                role="status"
-                style={{ width: "3rem", height: "3rem" }}
-              >
-                <span className="visually-hidden">Loading...</span>
-              </div>
-              <p className="mt-3 text-secondary mb-0">
-                Loading Purchase History...
-              </p>
+        {loading ? (
+          <div className="text-center py-5">
+            <div
+              className="spinner-border text-success"
+              role="status"
+              style={{ width: "2.5rem", height: "2.5rem", color: "var(--color-sage) !important" }}
+            >
+              <span className="visually-hidden">Loading...</span>
             </div>
-          ) : history.length === 0 ? (
-            <div className="text-center py-5">
-              <div
-                className="rounded-circle d-inline-flex justify-content-center align-items-center p-3 mb-3"
-                style={{
-                  background: "rgba(255, 255, 255, 0.04)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                  color: "#94a3b8",
-                }}
-              >
-                <i className="bi bi-clock-history fs-1"></i>
-              </div>
-              <h5 className="mt-2 text-light fw-bold">No Purchases Yet</h5>
-              <p className="text-secondary mb-0" style={{ fontSize: "0.9rem" }}>
-                Purchased kitchen items will be recorded here automatically.
-              </p>
+            <p className="mt-3 text-muted mb-0">
+              Loading Purchase History...
+            </p>
+          </div>
+        ) : history.length === 0 ? (
+          <div className="text-center py-5">
+            <div
+              className="rounded-circle d-inline-flex justify-content-center align-items-center p-3 mb-3"
+              style={{
+                background: "var(--color-sage-tint)",
+                color: "var(--color-sage)",
+              }}
+            >
+              <i className="bi bi-clock-history fs-1"></i>
             </div>
-          ) : (
-            <div className="table-responsive">
-              <table className="table table-hover align-middle mb-0">
-                <thead>
-                  <tr>
-                    <th width="60" className="text-center">#</th>
-                    <th width="220">Date & Time</th>
-                    <th>Item Purchased</th>
-                    <th>Purchased By</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {history.map((purchase, index) => (
-                    <tr key={purchase.id}>
-                      <td className="text-center text-secondary fw-semibold">
-                        {index + 1}
-                      </td>
-
-                      <td>
-                        {purchase.purchasedAt?.toDate ? (
-                          <>
-                            <div className="text-light fw-semibold">
-                              {purchase.purchasedAt.toDate().toLocaleDateString("en-IN", {
-                                day: "2-digit",
-                                month: "short",
-                                year: "numeric",
-                              })}
-                            </div>
-                            <small className="text-secondary" style={{ fontSize: "0.78rem" }}>
-                              {purchase.purchasedAt.toDate().toLocaleTimeString("en-IN", {
-                                hour: "numeric",
-                                minute: "2-digit",
-                                hour12: true,
-                              })}
-                            </small>
-                          </>
-                        ) : (
-                          <span className="text-secondary">—</span>
-                        )}
-                      </td>
-
-                      <td>
-                        <div className="d-flex align-items-center gap-2">
-                          <span
-                            className="rounded-circle p-1 d-inline-flex"
-                            style={{ background: "rgba(16, 185, 129, 0.15)" }}
-                          >
-                            <i className="bi bi-check2-circle text-success" style={{ fontSize: "0.9rem" }}></i>
-                          </span>
-                          <strong className="text-light">
-                            {purchase.itemName}
-                          </strong>
-                        </div>
-                      </td>
-
-                      <td>
-                        <span className="badge bg-success rounded-pill">
-                          <i className="bi bi-person-check me-1"></i>
-                          {purchase.purchasedBy}
-                        </span>
-                      </td>
+            <h5 className="mt-2 fw-bold" style={{ color: "var(--text-main)" }}>No Purchases Yet</h5>
+            <p className="text-muted mb-0" style={{ fontSize: "0.9rem" }}>
+              Purchased kitchen items will be recorded here automatically.
+            </p>
+          </div>
+        ) : (
+          <>
+            {/* Desktop Table View */}
+            <div className="card-body p-0 d-none d-md-block">
+              <div className="table-responsive border-0">
+                <table className="table align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th width="60" className="text-center">#</th>
+                      <th width="220">Date & Time</th>
+                      <th>Item Purchased</th>
+                      <th>Purchased By</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+
+                  <tbody>
+                    {history.map((purchase, index) => (
+                      <tr key={purchase.id}>
+                        <td className="text-center text-muted fw-semibold">
+                          {index + 1}
+                        </td>
+
+                        <td>
+                          {purchase.purchasedAt?.toDate ? (
+                            <>
+                              <div className="fw-medium text-main" style={{ fontSize: "0.88rem" }}>
+                                {purchase.purchasedAt.toDate().toLocaleDateString("en-IN", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                })}
+                              </div>
+                              <small className="text-muted" style={{ fontSize: "0.76rem" }}>
+                                {purchase.purchasedAt.toDate().toLocaleTimeString("en-IN", {
+                                  hour: "numeric",
+                                  minute: "2-digit",
+                                  hour12: true,
+                                })}
+                              </small>
+                            </>
+                          ) : (
+                            <span className="text-muted">—</span>
+                          )}
+                        </td>
+
+                        <td>
+                          <div className="d-flex align-items-center gap-2">
+                            <span
+                              className="rounded-circle p-1 d-inline-flex"
+                              style={{ background: "var(--color-sage-tint)", color: "var(--color-sage)" }}
+                            >
+                              <i className="bi bi-check2-circle" style={{ fontSize: "0.9rem" }}></i>
+                            </span>
+                            <strong style={{ color: "var(--text-main)" }}>
+                              {purchase.itemName}
+                            </strong>
+                          </div>
+                        </td>
+
+                        <td>
+                          <span className="badge bg-success">
+                            <i className="bi bi-person-check me-1"></i>
+                            {purchase.purchasedBy}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          )}
-        </div>
+
+            {/* Mobile Card List View */}
+            <div className="card-body p-3 d-md-none">
+              <div className="d-flex flex-column gap-2">
+                {history.map((purchase, index) => (
+                  <div
+                    key={purchase.id}
+                    className="pantry-card p-3 rounded-3"
+                    style={{
+                      background: "var(--bg-main)",
+                      border: "1px solid var(--border-card)",
+                    }}
+                  >
+                    <div className="d-flex justify-content-between align-items-start mb-2">
+                      <div>
+                        <small className="text-muted fw-semibold d-block mb-1">#{index + 1}</small>
+                        <h6 className="fw-bold mb-0" style={{ color: "var(--text-main)", fontSize: "1.05rem" }}>
+                          {purchase.itemName}
+                        </h6>
+                      </div>
+                      <span className="badge bg-success" style={{ fontSize: "0.72rem" }}>
+                        <i className="bi bi-check2 me-1"></i> Purchased
+                      </span>
+                    </div>
+
+                    <div className="d-flex justify-content-between align-items-center text-muted pt-2 border-top" style={{ borderColor: "var(--border-subtle)", fontSize: "0.8rem" }}>
+                      <span>Purchased by: <strong className="text-sage">{purchase.purchasedBy}</strong></span>
+                      <span>
+                        {purchase.purchasedAt?.toDate
+                          ? purchase.purchasedAt.toDate().toLocaleDateString("en-IN", {
+                              day: "2-digit",
+                              month: "short",
+                            })
+                          : ""}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </DashboardLayout>
   );

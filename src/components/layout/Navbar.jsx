@@ -5,6 +5,7 @@ import { signOut } from "firebase/auth";
 import auth from "../../firebase/auth";
 import { useAuth } from "../../context/AuthContext";
 import NotificationDropdown from "./NotificationDropdown";
+import logo from "../../assets/images/logo.png";
 
 import {
   subscribeToNotificationCount,
@@ -13,8 +14,6 @@ import {
 } from "../../services/notificationService";
 
 function Navbar({
-  sidebarOpen,
-  setSidebarOpen,
   search = "",
   setSearch = null,
 }) {
@@ -23,6 +22,7 @@ function Navbar({
 
   const [notificationCount, setNotificationCount] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
 
@@ -63,19 +63,6 @@ function Navbar({
     }
   };
 
-  const dashboardTitle = () => {
-    switch (user?.role) {
-      case "admin":
-        return "Admin Portal";
-      case "mother":
-        return "Mother Portal";
-      case "father":
-        return "Father Portal";
-      default:
-        return "Dashboard";
-    }
-  };
-
   const handleLogoClick = () => {
     switch (user?.role) {
       case "admin":
@@ -106,65 +93,66 @@ function Navbar({
       <nav
         className="navbar navbar-expand-lg px-3 px-lg-4"
         style={{
-          height: "80px",
+          height: "68px",
           position: "sticky",
           top: 0,
           zIndex: 1030,
-          background: "rgba(10, 19, 28, 0.7)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-          boxShadow: "0 10px 30px 0 rgba(0, 0, 0, 0.3)",
+          background: "rgba(255, 255, 255, 0.95)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          borderBottom: "1px solid var(--border-card)",
+          boxShadow: "0 2px 10px rgba(30, 41, 34, 0.03)",
         }}
       >
         <div className="container-fluid d-flex justify-content-between align-items-center flex-nowrap p-0">
-          {/* Left Side */}
-          <div className="d-flex align-items-center gap-3">
-            {/* Mobile Menu Button */}
-            <button
-              className="btn btn-outline-success d-lg-none p-2 rounded-3"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              title="Toggle Menu"
-              style={{ width: "42px", height: "42px" }}
-            >
-              <i className="bi bi-list fs-4"></i>
-            </button>
-
-            {/* Brand Logo & Title */}
+          {/* Left Side: Brand Logo & Title (Moved to far left, no hamburger on mobile) */}
+          <div
+            onClick={handleLogoClick}
+            title="Go to Kitchen Dashboard"
+            style={{ cursor: "pointer" }}
+            className="d-flex align-items-center gap-2 flex-shrink-0"
+          >
             <div
-              onClick={handleLogoClick}
-              title="Go to Dashboard"
-              style={{ cursor: "pointer" }}
-              className="d-flex flex-column"
+              className="d-flex align-items-center justify-content-center rounded-circle p-1"
+              style={{
+                width: "36px",
+                height: "36px",
+                background: "var(--color-sage-tint)",
+                border: "1px solid var(--color-sage-border)",
+              }}
             >
-              <div className="d-flex align-items-center gap-2">
-                <span
-                  className="d-inline-block rounded-circle bg-success pulse-emerald"
-                  style={{ width: "9px", height: "9px" }}
-                />
-                <h4
-                  className="mb-0 fw-bold text-light"
-                  style={{
-                    letterSpacing: "-0.02em",
-                    fontSize: "1.35rem",
-                  }}
-                >
-                  Kitchen<span className="text-emerald">Connect</span>
-                </h4>
-              </div>
-              <small className="text-secondary d-none d-md-block" style={{ fontSize: "0.78rem" }}>
-                {dashboardTitle()}
+              <img
+                src={logo}
+                alt="Logo"
+                style={{ width: "22px", height: "22px", objectFit: "contain" }}
+              />
+            </div>
+
+            <div className="d-flex flex-column">
+              <h5
+                className="mb-0 fw-bold"
+                style={{
+                  letterSpacing: "-0.02em",
+                  fontSize: "1.15rem",
+                  color: "var(--text-main)",
+                  lineHeight: 1.15,
+                }}
+              >
+                Kitchen<span className="text-sage">Connect</span>
+              </h5>
+              <small className="text-muted d-none d-sm-block text-capitalize" style={{ fontSize: "0.7rem" }}>
+                {user?.role} Portal
               </small>
             </div>
           </div>
 
-          {/* Search Bar */}
+          {/* Search Bar (Desktop Center) */}
           {setSearch && (
             <div
-              className="d-none d-md-block"
+              className="d-none d-md-block flex-grow-1"
               style={{
-                width: "360px",
-                margin: "0 20px",
+                maxWidth: "380px",
+                margin: "0 24px",
               }}
             >
               <div className="position-relative">
@@ -174,52 +162,62 @@ function Navbar({
                     left: "14px",
                     top: "50%",
                     transform: "translateY(-50%)",
-                    fontSize: "0.9rem",
+                    fontSize: "0.86rem",
                   }}
                 ></i>
                 <input
                   type="text"
                   className="form-control ps-5"
-                  placeholder="Search kitchen items & requests..."
+                  placeholder="Search pantry items & requests..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   style={{
-                    borderRadius: "999px",
-                    height: "44px",
-                    fontSize: "0.9rem",
+                    borderRadius: "var(--radius-full)",
+                    height: "40px",
+                    fontSize: "0.88rem",
+                    backgroundColor: "var(--bg-main) !important",
                   }}
                 />
               </div>
             </div>
           )}
 
-          {/* Right Side Controls */}
-          <div className="d-flex align-items-center gap-2 gap-md-3">
-            {/* Mobile Search Toggle */}
+          {/* Right Side Controls: Search, Notification, Profile */}
+          <div className="d-flex align-items-center gap-2 gap-sm-3 ms-auto">
+            {/* Mobile Search Button */}
             {setSearch && (
               <button
-                className="btn btn-light d-md-none rounded-circle"
+                type="button"
+                className="btn btn-light rounded-circle d-md-none d-flex align-items-center justify-content-center"
                 title="Search"
-                style={{ width: "42px", height: "42px", padding: 0 }}
-                onClick={() => setShowMobileSearch(!showMobileSearch)}
+                style={{ width: "38px", height: "38px", padding: 0 }}
+                onClick={() => {
+                  setShowMobileSearch(!showMobileSearch);
+                  setShowNotifications(false);
+                  setShowProfileMenu(false);
+                }}
               >
-                <i className="bi bi-search"></i>
+                <i className="bi bi-search text-muted" style={{ fontSize: "0.95rem" }}></i>
               </button>
             )}
 
-            {/* Notification Trigger */}
+            {/* Notification Bell Button */}
             <div className="position-relative">
               <button
-                className="btn btn-light rounded-circle position-relative"
+                type="button"
+                className="btn btn-light rounded-circle position-relative d-flex align-items-center justify-content-center"
                 title="Notifications"
-                style={{ width: "42px", height: "42px", padding: 0 }}
-                onClick={() => setShowNotifications(!showNotifications)}
+                style={{ width: "38px", height: "38px", padding: 0 }}
+                onClick={() => {
+                  setShowNotifications(!showNotifications);
+                  setShowProfileMenu(false);
+                }}
               >
-                <i className="bi bi-bell fs-5 text-light"></i>
+                <i className="bi bi-bell text-muted" style={{ fontSize: "1.05rem" }}></i>
                 {notificationCount > 0 && (
                   <span
                     className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                    style={{ fontSize: "0.7rem", padding: "0.35rem 0.55rem" }}
+                    style={{ fontSize: "0.64rem", padding: "0.25rem 0.45rem" }}
                   >
                     {notificationCount}
                   </span>
@@ -233,74 +231,150 @@ function Navbar({
               />
             </div>
 
-            {/* User Pill Info */}
+            {/* Mobile Profile Icon Button (with dropdown for Logout) */}
+            <div className="position-relative d-md-none">
+              <button
+                type="button"
+                className="btn rounded-circle text-white fw-bold d-flex align-items-center justify-content-center p-0"
+                style={{
+                  width: "38px",
+                  height: "38px",
+                  background: "var(--color-sage)",
+                  fontSize: "14px",
+                  boxShadow: "0 2px 6px rgba(56, 94, 69, 0.25)",
+                }}
+                onClick={() => {
+                  setShowProfileMenu(!showProfileMenu);
+                  setShowNotifications(false);
+                }}
+                title="Account Menu"
+              >
+                {user?.name?.charAt(0).toUpperCase()}
+              </button>
+
+              {/* Mobile Profile Dropdown Popup */}
+              {showProfileMenu && (
+                <div
+                  className="dropdown-menu dropdown-menu-end show p-3 shadow-lg"
+                  style={{
+                    width: "230px",
+                    right: 0,
+                    left: "auto",
+                    marginTop: "10px",
+                    background: "#ffffff",
+                    border: "1px solid var(--border-card)",
+                    borderRadius: "var(--radius-lg)",
+                    boxShadow: "var(--shadow-floating)",
+                    zIndex: 1050,
+                  }}
+                >
+                  <div className="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom" style={{ borderColor: "var(--border-subtle)" }}>
+                    <div
+                      className="rounded-circle d-flex justify-content-center align-items-center text-white fw-bold flex-shrink-0"
+                      style={{
+                        width: "36px",
+                        height: "36px",
+                        background: "var(--color-sage)",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {user?.name?.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="overflow-hidden" style={{ lineHeight: 1.2 }}>
+                      <div className="fw-semibold text-truncate" style={{ fontSize: "0.88rem", color: "var(--text-main)" }}>
+                        {user?.name}
+                      </div>
+                      <small className="text-muted text-capitalize" style={{ fontSize: "0.72rem" }}>
+                        {user?.role} Portal
+                      </small>
+                    </div>
+                  </div>
+
+                  <button
+                    className="btn btn-outline-danger btn-sm w-100"
+                    onClick={handleLogout}
+                    style={{ borderRadius: "var(--radius-md)" }}
+                  >
+                    <i className="bi bi-box-arrow-right me-2"></i>
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Desktop User Pill & Logout Button */}
             <div
               className="d-none d-md-flex align-items-center gap-2 px-3 py-1 rounded-pill"
               style={{
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
+                background: "var(--bg-main)",
+                border: "1px solid var(--border-card)",
               }}
             >
               <div
                 className="rounded-circle d-flex justify-content-center align-items-center text-white fw-bold"
                 style={{
-                  width: "32px",
-                  height: "32px",
-                  background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-                  boxShadow: "0 0 10px rgba(16, 185, 129, 0.4)",
-                  fontSize: "14px",
+                  width: "28px",
+                  height: "28px",
+                  background: "var(--color-sage)",
+                  fontSize: "13px",
                 }}
               >
                 {user?.name?.charAt(0).toUpperCase()}
               </div>
               <div className="text-start" style={{ lineHeight: 1.2 }}>
-                <div className="fw-semibold text-light" style={{ fontSize: "0.85rem" }}>
+                <div className="fw-semibold text-main" style={{ fontSize: "0.84rem" }}>
                   {user?.name}
                 </div>
-                <small className="text-secondary text-capitalize" style={{ fontSize: "0.72rem" }}>
+                <small className="text-muted text-capitalize" style={{ fontSize: "0.7rem" }}>
                   {user?.role}
                 </small>
               </div>
             </div>
 
-            {/* Logout Button */}
             <button
-              className="btn btn-outline-danger"
-              style={{ height: "42px", padding: "0 1rem" }}
+              className="btn btn-outline-danger d-none d-md-inline-flex"
+              style={{ height: "38px", padding: "0 0.9rem", fontSize: "0.86rem" }}
               onClick={handleLogout}
               title="Sign Out"
             >
               <i className="bi bi-box-arrow-right"></i>
-              <span className="ms-1 d-none d-md-inline" style={{ fontSize: "0.88rem" }}>
-                Logout
-              </span>
+              <span className="ms-1">Logout</span>
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Search Dropdown */}
+      {/* Mobile Search Input Dropdown */}
       {setSearch && showMobileSearch && (
         <div
-          className="d-md-none p-3 border-bottom shadow-lg"
+          className="d-md-none p-3 border-bottom shadow-sm"
           style={{
             position: "sticky",
-            top: "80px",
+            top: "68px",
             zIndex: 1029,
-            background: "rgba(10, 19, 28, 0.95)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+            background: "#ffffff",
+            borderBottom: "1px solid var(--border-card)",
           }}
         >
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search kitchen items..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            autoFocus
-          />
+          <div className="position-relative">
+            <i
+              className="bi bi-search position-absolute text-muted"
+              style={{
+                left: "14px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                fontSize: "0.9rem",
+              }}
+            ></i>
+            <input
+              type="text"
+              className="form-control ps-5"
+              placeholder="Search pantry items & requests..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              autoFocus
+            />
+          </div>
         </div>
       )}
     </>

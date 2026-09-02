@@ -1,39 +1,32 @@
 /* ==========================================================================
-   KitchenConnect - Smooth Glassmorphic Animations & Micro-Interactions
+   KitchenConnect — Subtle Animations & Transitions
    ========================================================================== */
 
-/* Button Micro-Interactions */
-.btn {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+/* Page Fade In */
+.page-fade-in {
+  animation: pageFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.btn:active {
-  transform: scale(0.96) !important;
-}
-
-/* Card Hover 3D Glass Effect */
-.card,
-.dashboard-card {
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              background 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Navbar Transition */
-.navbar {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Modal Popup & Blur Animation */
-.modal-content {
-  animation: glassModalPopup 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes glassModalPopup {
+@keyframes pageFadeIn {
   from {
     opacity: 0;
-    transform: scale(0.92) translateY(16px);
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal Popup Animation */
+.modal-content {
+  animation: modalSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(12px);
   }
   to {
     opacity: 1;
@@ -41,73 +34,32 @@
   }
 }
 
-/* Table Row Hover */
-.table tbody tr {
-  transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-/* Pulse Animation for glowing badges and dots */
-@keyframes pulseGlow {
+/* Subtle Pulse for Live Badges */
+@keyframes subtlePulse {
   0%, 100% {
-    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+    transform: scale(1);
+    opacity: 1;
   }
   50% {
-    box-shadow: 0 0 22px rgba(16, 185, 129, 0.8), 0 0 30px rgba(52, 211, 153, 0.4);
+    transform: scale(1.15);
+    opacity: 0.8;
   }
 }
 
-.pulse-emerald {
-  animation: pulseGlow 2.5s infinite ease-in-out;
+.pulse-sage {
+  animation: subtlePulse 2.5s infinite ease-in-out;
 }
 
-/* Shimmer reflection */
-@keyframes shimmerReflection {
-  0% {
-    transform: translateX(-100%) rotate(25deg);
-  }
-  100% {
-    transform: translateX(200%) rotate(25deg);
-  }
+/* Mobile Bottom Navigation Slide In */
+.mobile-bottom-nav {
+  animation: slideUpNav 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.glass-shimmer {
-  position: relative;
-  overflow: hidden;
-}
-
-.glass-shimmer::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    60deg,
-    transparent 35%,
-    rgba(255, 255, 255, 0.08) 50%,
-    transparent 65%
-  );
-  transform: translateX(-100%) rotate(25deg);
-  pointer-events: none;
-}
-
-.glass-shimmer:hover::after {
-  animation: shimmerReflection 1.2s ease;
-}
-
-/* Fade in for page contents */
-.page-fade-in {
-  animation: pageFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes pageFadeIn {
+@keyframes slideUpNav {
   from {
-    opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(100%);
   }
   to {
-    opacity: 1;
     transform: translateY(0);
   }
 }

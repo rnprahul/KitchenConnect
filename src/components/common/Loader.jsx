@@ -5,38 +5,35 @@ function Loader() {
     <div
       className="d-flex flex-column justify-content-center align-items-center vh-100 position-relative overflow-hidden"
       style={{
-        background: "var(--color-bg-deep)",
+        background: "var(--bg-main)",
       }}
     >
-      {/* Ambient background glow */}
-      <div className="ambient-glow-mesh">
-        <div className="ambient-orb ambient-orb-1" />
-        <div className="ambient-orb ambient-orb-2" />
-      </div>
+      <div className="kitchen-ambient-mesh" />
 
-      {/* Glass card loader */}
+      {/* Card loader */}
       <div
-        className="glass-card d-flex flex-column align-items-center text-center p-5 position-relative"
+        className="card d-flex flex-column align-items-center text-center p-5 position-relative"
         style={{
-          maxWidth: "380px",
+          maxWidth: "360px",
           width: "90%",
           zIndex: 1,
-          borderRadius: "28px",
+          borderRadius: "var(--radius-xl)",
+          boxShadow: "var(--shadow-lg)",
         }}
       >
         <div
-          className="p-3 rounded-circle mb-4 pulse-emerald position-relative"
+          className="p-3 rounded-circle mb-3 position-relative"
           style={{
-            background: "rgba(16, 185, 129, 0.1)",
-            border: "1px solid rgba(52, 211, 153, 0.3)",
+            background: "var(--color-sage-tint)",
+            border: "1px solid var(--color-sage-border)",
           }}
         >
           <img
             src={logo}
             alt="KitchenConnect"
             style={{
-              width: "80px",
-              height: "80px",
+              width: "70px",
+              height: "70px",
               objectFit: "contain",
             }}
           />
@@ -45,20 +42,20 @@ function Loader() {
         <div
           className="spinner-border text-success mb-3"
           role="status"
-          style={{ width: "2.5rem", height: "2.5rem" }}
+          style={{ width: "2rem", height: "2rem", color: "var(--color-sage) !important" }}
         >
           <span className="visually-hidden">Loading...</span>
         </div>
 
         <h4
-          className="fw-bold text-light mb-1"
-          style={{ fontSize: "1.4rem" }}
+          className="fw-bold mb-1"
+          style={{ fontSize: "1.3rem", color: "var(--text-main)" }}
         >
-          Kitchen<span className="text-emerald">Connect</span>
+          Kitchen<span style={{ color: "var(--color-sage)" }}>Connect</span>
         </h4>
 
-        <p className="text-secondary mb-0" style={{ fontSize: "0.9rem" }}>
-          Authenticating & loading kitchen...
+        <p className="text-secondary mb-0" style={{ fontSize: "0.88rem" }}>
+          Preparing your kitchen workspace...
         </p>
       </div>
     </div>

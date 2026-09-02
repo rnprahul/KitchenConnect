@@ -23,10 +23,10 @@ function DeleteRequestModal({
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             {/* Header */}
-            <div className="modal-header bg-danger text-white">
+            <div className="modal-header bg-danger">
               <div className="d-flex align-items-center gap-2">
                 <i className="bi bi-cart-x-fill text-danger fs-5"></i>
-                <h5 className="modal-title fw-bold text-light mb-0">
+                <h5 className="modal-title fw-bold mb-0" style={{ color: "var(--text-main)" }}>
                   Remove Shopping Request
                 </h5>
               </div>
@@ -44,35 +44,35 @@ function DeleteRequestModal({
                 <div
                   className="rounded-circle d-inline-flex justify-content-center align-items-center p-3 mb-3"
                   style={{
-                    background: "rgba(244, 63, 94, 0.12)",
-                    border: "1px solid rgba(251, 113, 133, 0.3)",
-                    color: "#fb7185",
+                    background: "var(--status-out-of-stock-bg)",
+                    border: "1px solid var(--status-out-of-stock-border)",
+                    color: "var(--status-out-of-stock-text)",
                   }}
                 >
-                  <i className="bi bi-cart-dash-fill" style={{ fontSize: "2.5rem" }}></i>
+                  <i className="bi bi-cart-dash-fill" style={{ fontSize: "2.2rem" }}></i>
                 </div>
 
-                <h4 className="fw-bold text-light mb-2">
-                  Remove from List?
+                <h4 className="fw-bold mb-2" style={{ color: "var(--text-main)" }}>
+                  Remove from Shopping List?
                 </h4>
 
-                <p className="text-secondary mb-3" style={{ fontSize: "0.95rem" }}>
+                <p className="text-muted mb-3" style={{ fontSize: "0.95rem" }}>
                   You are about to cancel the shopping request for:
                 </p>
 
                 <div
                   className="p-3 rounded-3 mb-3"
                   style={{
-                    background: "rgba(255, 255, 255, 0.04)",
-                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    background: "var(--bg-main)",
+                    border: "1px solid var(--border-card)",
                   }}
                 >
-                  <span className="fw-bold text-warning fs-5">
+                  <span className="fw-bold fs-5" style={{ color: "var(--color-amber)" }}>
                     "{request.itemName}"
                   </span>
                 </div>
 
-                <small className="text-secondary d-block" style={{ fontSize: "0.82rem" }}>
+                <small className="text-muted d-block" style={{ fontSize: "0.82rem" }}>
                   This request will be removed from the pending shopping list.
                 </small>
               </div>

@@ -61,30 +61,43 @@ function Dashboard() {
 
   return (
     <DashboardLayout>
-      {/* Welcome Hero Card */}
-      <div className="card dashboard-card mb-4 position-relative overflow-hidden">
+      {/* Welcome Hero Banner */}
+      <div className="dashboard-hero-card mb-4">
         <div className="card-body p-4 p-md-5">
           <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
             <div>
-              <div className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style={{ background: "rgba(16, 185, 129, 0.12)", border: "1px solid rgba(52, 211, 153, 0.3)" }}>
-                <span className="rounded-circle bg-success pulse-emerald d-inline-block" style={{ width: "8px", height: "8px" }} />
-                <small className="text-emerald fw-semibold" style={{ fontSize: "0.8rem" }}>
-                  Admin Control Center
+              <div
+                className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3"
+                style={{
+                  background: "var(--color-sage-tint)",
+                  border: "1px solid var(--color-sage-border)",
+                }}
+              >
+                <span className="rounded-circle bg-success pulse-sage d-inline-block" style={{ width: "8px", height: "8px", background: "var(--color-sage) !important" }} />
+                <small className="fw-semibold text-sage" style={{ fontSize: "0.8rem" }}>
+                  Kitchen Hub · Admin Mode
                 </small>
               </div>
 
-              <h1 className="fw-bold text-light mb-2" style={{ fontSize: "2rem" }}>
-                Welcome back, {user?.name}! 👋
+              <h1 className="fw-bold mb-2" style={{ fontSize: "1.85rem", color: "var(--text-main)" }}>
+                Good day, {user?.name}! 🌿
               </h1>
 
-              <p className="text-secondary mb-0" style={{ fontSize: "1rem", maxWidth: "600px" }}>
-                Manage kitchen inventory, monitor pending shopping requests, and track grocery history.
+              <p className="text-muted mb-0" style={{ fontSize: "0.98rem", maxWidth: "600px" }}>
+                Here is your kitchen pantry status, pending shopping requests, and grocery audit trail.
               </p>
             </div>
 
-            <div className="text-md-end px-3 py-2 rounded-3" style={{ background: "rgba(255, 255, 255, 0.03)", border: "1px solid rgba(255, 255, 255, 0.08)" }}>
-              <small className="text-secondary d-block" style={{ fontSize: "0.75rem" }}>TODAY</small>
-              <span className="fw-semibold text-light" style={{ fontSize: "0.95rem" }}>
+            <div
+              className="text-md-end px-3 py-2 rounded-3"
+              style={{
+                background: "#ffffff",
+                border: "1px solid var(--border-card)",
+                boxShadow: "var(--shadow-xs)",
+              }}
+            >
+              <small className="text-muted d-block" style={{ fontSize: "0.72rem", letterSpacing: "0.04em" }}>TODAY</small>
+              <span className="fw-semibold text-main" style={{ fontSize: "0.92rem" }}>
                 {today}
               </span>
             </div>
@@ -92,30 +105,27 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Statistics Cards */}
-      <div className="row g-4 mb-4">
+      {/* Summary Statistics Cards */}
+      <div className="row g-3 g-md-4 mb-4">
         {/* Kitchen Items Card */}
         <div className="col-lg-4 col-md-6">
           <div
-            className="card dashboard-card h-100"
-            style={{ cursor: "pointer" }}
+            className="stat-card"
             onClick={() => navigate("/admin/items")}
           >
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <span className="text-secondary fw-semibold d-block mb-1" style={{ fontSize: "0.88rem" }}>
-                    Total Kitchen Items
-                  </span>
-                  <h2 className="fw-bold text-light mb-0">{itemsCount}</h2>
-                  <small className="text-emerald mt-2 d-inline-flex align-items-center gap-1" style={{ fontSize: "0.8rem" }}>
-                    <i className="bi bi-arrow-right-circle"></i> View inventory
-                  </small>
-                </div>
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <span className="text-muted fw-semibold d-block mb-1" style={{ fontSize: "0.86rem" }}>
+                  Pantry Inventory
+                </span>
+                <div className="stat-number">{itemsCount}</div>
+                <small className="text-sage fw-semibold mt-1 d-inline-flex align-items-center gap-1" style={{ fontSize: "0.82rem" }}>
+                  <i className="bi bi-arrow-right-circle"></i> Manage pantry
+                </small>
+              </div>
 
-                <div className="icon-box bg-success text-white">
-                  <i className="bi bi-basket2-fill fs-4"></i>
-                </div>
+              <div className="stat-icon-wrapper stat-icon-sage">
+                <i className="bi bi-basket2-fill fs-4"></i>
               </div>
             </div>
           </div>
@@ -124,52 +134,50 @@ function Dashboard() {
         {/* Pending Requests Card */}
         <div className="col-lg-4 col-md-6">
           <div
-            className="card dashboard-card h-100"
-            style={{ cursor: "pointer" }}
+            className="stat-card"
             onClick={() => setShowPendingModal(true)}
           >
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <span className="text-secondary fw-semibold d-block mb-1" style={{ fontSize: "0.88rem" }}>
-                    Pending Requests
-                  </span>
-                  <h2 className="fw-bold text-warning mb-0">{pendingCount}</h2>
-                  <small className="text-warning mt-2 d-inline-flex align-items-center gap-1" style={{ fontSize: "0.8rem" }}>
-                    <i className="bi bi-eye"></i> View pending list
-                  </small>
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <span className="text-muted fw-semibold d-block mb-1" style={{ fontSize: "0.86rem" }}>
+                  Pending Requests
+                </span>
+                <div className="stat-number" style={{ color: "var(--color-amber)" }}>
+                  {pendingCount}
                 </div>
+                <small className="fw-semibold mt-1 d-inline-flex align-items-center gap-1" style={{ fontSize: "0.82rem", color: "var(--color-amber)" }}>
+                  <i className="bi bi-eye"></i> View shopping queue
+                </small>
+              </div>
 
-                <div className="icon-box bg-warning text-white">
-                  <i className="bi bi-cart-check-fill fs-4"></i>
-                </div>
+              <div className="stat-icon-wrapper stat-icon-amber">
+                <i className="bi bi-cart-check-fill fs-4"></i>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Purchased Items Card */}
+        {/* Completed Purchases Card */}
         <div className="col-lg-4 col-md-6">
           <div
-            className="card dashboard-card h-100"
-            style={{ cursor: "pointer" }}
+            className="stat-card"
             onClick={() => navigate("/admin/history")}
           >
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <span className="text-secondary fw-semibold d-block mb-1" style={{ fontSize: "0.88rem" }}>
-                    Completed Purchases
-                  </span>
-                  <h2 className="fw-bold text-light mb-0">{purchasedCount}</h2>
-                  <small className="text-secondary mt-2 d-inline-flex align-items-center gap-1" style={{ fontSize: "0.8rem" }}>
-                    <i className="bi bi-clock-history"></i> View full history
-                  </small>
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <span className="text-muted fw-semibold d-block mb-1" style={{ fontSize: "0.86rem" }}>
+                  Completed Purchases
+                </span>
+                <div className="stat-number" style={{ color: "var(--color-sage)" }}>
+                  {purchasedCount}
                 </div>
+                <small className="text-muted fw-semibold mt-1 d-inline-flex align-items-center gap-1" style={{ fontSize: "0.82rem" }}>
+                  <i className="bi bi-clock-history"></i> View history log
+                </small>
+              </div>
 
-                <div className="icon-box bg-danger text-white">
-                  <i className="bi bi-check-circle-fill fs-4"></i>
-                </div>
+              <div className="stat-icon-wrapper stat-icon-terracotta">
+                <i className="bi bi-bag-check-fill fs-4"></i>
               </div>
             </div>
           </div>
@@ -177,43 +185,49 @@ function Dashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="card dashboard-card mb-4">
+      <div className="card mb-4">
         <div className="card-header d-flex align-items-center gap-2">
-          <i className="bi bi-lightning-charge-fill text-warning"></i>
-          <h5 className="fw-bold text-light mb-0" style={{ fontSize: "1.1rem" }}>
-            Quick Management Actions
+          <i className="bi bi-lightning-charge-fill" style={{ color: "var(--color-amber)" }}></i>
+          <h5 className="fw-bold mb-0" style={{ fontSize: "1.05rem", color: "var(--text-main)" }}>
+            Kitchen Quick Actions
           </h5>
         </div>
 
-        <div className="card-body p-4">
+        <div className="card-body p-3 p-md-4">
           <div className="row g-3">
             <div className="col-md-4">
               <button
-                className="quick-action-btn btn-emerald"
+                className="quick-action-tile tile-sage"
                 onClick={() => navigate("/admin/items")}
               >
-                <i className="bi bi-plus-circle-fill fs-5"></i>
-                <span>Add / Manage Kitchen Items</span>
+                <div className="tile-icon bg-sage-tint text-sage">
+                  <i className="bi bi-plus-circle-fill"></i>
+                </div>
+                <span>Add / Manage Pantry Items</span>
               </button>
             </div>
 
             <div className="col-md-4">
               <button
-                className="quick-action-btn btn-amber"
+                className="quick-action-tile tile-amber"
                 onClick={() => navigate("/admin/requests")}
               >
-                <i className="bi bi-cart-fill fs-5"></i>
-                <span>Shopping Requests List</span>
+                <div className="tile-icon bg-amber-tint text-amber" style={{ color: "var(--color-amber)" }}>
+                  <i className="bi bi-cart-fill"></i>
+                </div>
+                <span>Review Shopping Requests</span>
               </button>
             </div>
 
             <div className="col-md-4">
               <button
-                className="quick-action-btn btn-blue"
+                className="quick-action-tile tile-wood"
                 onClick={() => navigate("/admin/history")}
               >
-                <i className="bi bi-clock-history fs-5"></i>
-                <span>View Purchase History</span>
+                <div className="tile-icon bg-terracotta-tint text-terracotta">
+                  <i className="bi bi-clock-history"></i>
+                </div>
+                <span>Audit Purchase Records</span>
               </button>
             </div>
           </div>
@@ -221,19 +235,19 @@ function Dashboard() {
       </div>
 
       {/* Recent Activity */}
-      <div className="card dashboard-card">
+      <div className="card">
         <div className="card-header d-flex align-items-center gap-2">
-          <i className="bi bi-activity text-success"></i>
-          <h5 className="fw-bold text-light mb-0" style={{ fontSize: "1.1rem" }}>
-            Recent Activity Feed
+          <i className="bi bi-activity text-sage"></i>
+          <h5 className="fw-bold mb-0" style={{ fontSize: "1.05rem", color: "var(--text-main)" }}>
+            Recent Kitchen Activity
           </h5>
         </div>
 
-        <div className="card-body p-4">
+        <div className="card-body p-3 p-md-4">
           {activities.length === 0 ? (
             <div className="text-center py-5 text-muted">
-              <i className="bi bi-inbox fs-2 d-block mb-2 text-secondary"></i>
-              <p className="mb-0 text-secondary">No recent activity found.</p>
+              <i className="bi bi-inbox fs-1 d-block mb-2 text-subtle" style={{ color: "#a0aec0" }}></i>
+              <p className="mb-0 text-muted">No recent kitchen activity found.</p>
             </div>
           ) : (
             <div className="list-group list-group-flush gap-2">
@@ -243,13 +257,13 @@ function Dashboard() {
                   className="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2"
                 >
                   <div>
-                    <div className="fw-semibold text-light mb-1">
+                    <div className="fw-semibold mb-1" style={{ color: "var(--text-main)" }}>
                       <span className="me-2">🛒</span>
-                      <span className="text-secondary">{activity.requestedBy}</span> requested{" "}
-                      <strong className="text-emerald">{activity.itemName}</strong>
+                      <span className="text-muted">{activity.requestedBy}</span> requested{" "}
+                      <strong className="text-sage">{activity.itemName}</strong>
                     </div>
 
-                    <small className="text-secondary" style={{ fontSize: "0.78rem" }}>
+                    <small className="text-muted" style={{ fontSize: "0.78rem" }}>
                       <i className="bi bi-clock me-1"></i>
                       {activity.requestedAt?.toDate
                         ? activity.requestedAt.toDate().toLocaleString("en-IN", {
@@ -266,7 +280,7 @@ function Dashboard() {
                         <i className="bi bi-check2-circle me-1"></i>
                         Purchased by {activity.purchasedBy}
                       </span>
-                      <small className="text-secondary d-block" style={{ fontSize: "0.75rem" }}>
+                      <small className="text-muted d-block" style={{ fontSize: "0.75rem" }}>
                         {activity.purchasedAt?.toDate
                           ? activity.purchasedAt.toDate().toLocaleString("en-IN", {
                               dateStyle: "medium",

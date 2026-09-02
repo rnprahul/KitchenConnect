@@ -20,8 +20,6 @@ function ShoppingRequests() {
 
   // Load Requests
   useEffect(() => {
-    setLoading(true);
-
     const unsubscribe = subscribeToRequests((data) => {
       setRequests(data);
       setLoading(false);
@@ -39,7 +37,7 @@ function ShoppingRequests() {
   const handleDelete = async (id) => {
     try {
       await deleteRequest(id);
-      toast.success("Shopping request deleted successfully");
+      toast.success("Shopping request removed successfully");
       setShowDeleteModal(false);
       setSelectedRequest(null);
     } catch (error) {
@@ -53,24 +51,30 @@ function ShoppingRequests() {
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <div className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2" style={{ background: "rgba(245, 158, 11, 0.12)", border: "1px solid rgba(251, 191, 36, 0.3)" }}>
-            <i className="bi bi-cart-fill text-warning"></i>
-            <small className="text-warning fw-semibold" style={{ fontSize: "0.8rem" }}>
-              Request Queue
+          <div
+            className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2"
+            style={{
+              background: "var(--color-amber-light)",
+              border: "1px solid #fde68a",
+            }}
+          >
+            <i className="bi bi-cart-fill" style={{ color: "var(--color-amber)" }}></i>
+            <small className="fw-semibold" style={{ fontSize: "0.8rem", color: "var(--color-amber)" }}>
+              Shopping Queue
             </small>
           </div>
 
-          <h2 className="fw-bold text-light mb-1">
+          <h2 className="fw-bold mb-1" style={{ color: "var(--text-main)" }}>
             Shopping Requests
           </h2>
 
-          <p className="text-secondary mb-0" style={{ fontSize: "0.95rem" }}>
-            Monitor and manage all shopping requests created by household members.
+          <p className="text-muted mb-0" style={{ fontSize: "0.95rem" }}>
+            Monitor and manage all household shopping requests submitted for grocery runs.
           </p>
         </div>
       </div>
 
-      {/* Request Table */}
+      {/* Request Table / Cards */}
       <RequestTable
         requests={requests}
         loading={loading}

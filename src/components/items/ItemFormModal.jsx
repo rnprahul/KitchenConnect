@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function ItemFormModal({
   show,
@@ -6,15 +6,13 @@ function ItemFormModal({
   onSave,
   item,
 }) {
-  const [name, setName] = useState("");
+  const [name, setName] = useState(item?.name || "");
+  const [prevItem, setPrevItem] = useState(item);
 
-  useEffect(() => {
-    if (item) {
-      setName(item.name);
-    } else {
-      setName("");
-    }
-  }, [item, show]);
+  if (item !== prevItem) {
+    setPrevItem(item);
+    setName(item?.name || "");
+  }
 
   if (!show) return null;
 
@@ -44,10 +42,10 @@ function ItemFormModal({
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             {/* Header */}
-            <div className="modal-header bg-success text-white">
+            <div className="modal-header bg-success">
               <div className="d-flex align-items-center gap-2">
-                <i className="bi bi-basket2-fill text-success fs-5"></i>
-                <h5 className="modal-title fw-bold text-light mb-0">
+                <i className="bi bi-basket2-fill text-sage fs-5"></i>
+                <h5 className="modal-title fw-bold mb-0" style={{ color: "var(--text-main)" }}>
                   {item ? "Edit Kitchen Item" : "Add New Kitchen Item"}
                 </h5>
               </div>
@@ -75,8 +73,8 @@ function ItemFormModal({
                     autoFocus
                     required
                   />
-                  <small className="text-secondary mt-1 d-block" style={{ fontSize: "0.8rem" }}>
-                    Enter the name of the kitchen supply or ingredient.
+                  <small className="text-muted mt-1 d-block" style={{ fontSize: "0.8rem" }}>
+                    Enter the name of the ingredient, grocery staple, or pantry item.
                   </small>
                 </div>
               </div>
@@ -97,7 +95,7 @@ function ItemFormModal({
                   disabled={!name.trim()}
                 >
                   <i className="bi bi-check2-circle me-1"></i>
-                  {item ? "Update Item" : "Save Item"}
+                  {item ? "Update Item" : "Save to Pantry"}
                 </button>
               </div>
             </form>

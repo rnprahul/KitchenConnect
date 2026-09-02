@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function RequestFormModal({
   show,
@@ -7,12 +7,6 @@ function RequestFormModal({
   items,
 }) {
   const [itemId, setItemId] = useState("");
-
-  useEffect(() => {
-    if (show) {
-      setItemId("");
-    }
-  }, [show]);
 
   if (!show) return null;
 
@@ -56,10 +50,10 @@ function RequestFormModal({
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             {/* Header */}
-            <div className="modal-header bg-success text-white">
+            <div className="modal-header bg-success">
               <div className="d-flex align-items-center gap-2">
-                <i className="bi bi-cart-plus-fill text-success fs-5"></i>
-                <h5 className="modal-title fw-bold text-light mb-0">
+                <i className="bi bi-cart-plus-fill text-sage fs-5"></i>
+                <h5 className="modal-title fw-bold mb-0" style={{ color: "var(--text-main)" }}>
                   Create Shopping Request
                 </h5>
               </div>
@@ -78,17 +72,17 @@ function RequestFormModal({
                   <div
                     className="p-4 text-center rounded-3"
                     style={{
-                      background: "rgba(59, 130, 246, 0.1)",
-                      border: "1px solid rgba(96, 165, 250, 0.3)",
-                      color: "#93c5fd",
+                      background: "var(--color-sage-tint)",
+                      border: "1px solid var(--color-sage-border)",
+                      color: "var(--color-sage-dark)",
                     }}
                   >
-                    <i className="bi bi-check2-all fs-2 d-block mb-2 text-primary"></i>
+                    <i className="bi bi-check2-all fs-2 d-block mb-2 text-sage"></i>
                     <p className="mb-0 fw-semibold">
                       All kitchen items are currently in stock!
                     </p>
-                    <small className="text-secondary">
-                      No out-of-stock items require shopping.
+                    <small className="text-muted">
+                      No out-of-stock pantry items require grocery shopping.
                     </small>
                   </div>
                 ) : (
@@ -110,7 +104,7 @@ function RequestFormModal({
                         </option>
                       ))}
                     </select>
-                    <small className="text-secondary mt-2 d-block" style={{ fontSize: "0.8rem" }}>
+                    <small className="text-muted mt-2 d-block" style={{ fontSize: "0.8rem" }}>
                       This item will be added to the pending requests queue for purchase.
                     </small>
                   </div>

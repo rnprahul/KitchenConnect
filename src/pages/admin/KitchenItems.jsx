@@ -26,8 +26,6 @@ function KitchenItems() {
 
   // Load Items
   useEffect(() => {
-    setLoading(true);
-
     const unsubscribe = subscribeToItems((itemsData) => {
       setItems(itemsData);
       setLoading(false);
@@ -58,7 +56,7 @@ function KitchenItems() {
       );
 
       if (exists) {
-        toast.warning("Item already exists.");
+        toast.warning("Item already exists in pantry.");
         return;
       }
 
@@ -67,7 +65,7 @@ function KitchenItems() {
         toast.success("Kitchen item updated successfully");
       } else {
         await addItem(data);
-        toast.success("Kitchen item added successfully");
+        toast.success("Kitchen item added to pantry");
       }
 
       setShowFormModal(false);
@@ -87,7 +85,7 @@ function KitchenItems() {
   const handleDelete = async (id) => {
     try {
       await deleteItem(id);
-      toast.success("Kitchen item deleted successfully");
+      toast.success("Kitchen item deleted from pantry");
       setShowDeleteModal(false);
       setSelectedItem(null);
     } catch (error) {
@@ -105,19 +103,25 @@ function KitchenItems() {
       {/* Header Section */}
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-4">
         <div>
-          <div className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2" style={{ background: "rgba(16, 185, 129, 0.12)", border: "1px solid rgba(52, 211, 153, 0.3)" }}>
-            <i className="bi bi-basket2 text-emerald"></i>
-            <small className="text-emerald fw-semibold" style={{ fontSize: "0.8rem" }}>
-              Inventory Management
+          <div
+            className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2"
+            style={{
+              background: "var(--color-sage-tint)",
+              border: "1px solid var(--color-sage-border)",
+            }}
+          >
+            <i className="bi bi-basket2 text-sage"></i>
+            <small className="fw-semibold text-sage" style={{ fontSize: "0.8rem" }}>
+              Pantry Inventory
             </small>
           </div>
 
-          <h2 className="fw-bold text-light mb-1">
+          <h2 className="fw-bold mb-1" style={{ color: "var(--text-main)" }}>
             Kitchen Items
           </h2>
 
-          <p className="text-secondary mb-0" style={{ fontSize: "0.95rem" }}>
-            Track and manage all pantry items and their stock status.
+          <p className="text-muted mb-0" style={{ fontSize: "0.95rem" }}>
+            Track, restock, and manage all household kitchen ingredients and pantry staples.
           </p>
         </div>
 
@@ -130,12 +134,13 @@ function KitchenItems() {
         </button>
       </div>
 
-      {/* Items Table */}
+      {/* Items Table & Responsive Cards */}
       <ItemTable
         items={filteredItems}
         loading={loading}
         onEdit={handleEdit}
         onDelete={handleDeleteClick}
+        onAddNew={handleAddClick}
       />
 
       {/* Modals */}

@@ -56,50 +56,78 @@ function Dashboard() {
     };
   }, [user]);
 
+  const today = new Date().toLocaleDateString("en-IN", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
   return (
     <DashboardLayout>
-      {/* Welcome Hero */}
-      <div className="card dashboard-card mb-4 position-relative overflow-hidden">
+      {/* Welcome Hero Card */}
+      <div className="dashboard-hero-card mb-4">
         <div className="card-body p-4 p-md-5">
-          <div className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style={{ background: "rgba(16, 185, 129, 0.12)", border: "1px solid rgba(52, 211, 153, 0.3)" }}>
-            <span className="rounded-circle bg-success pulse-emerald d-inline-block" style={{ width: "8px", height: "8px" }} />
-            <small className="text-emerald fw-semibold" style={{ fontSize: "0.8rem" }}>
-              Mother's Kitchen Portal
-            </small>
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+            <div>
+              <div
+                className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3"
+                style={{
+                  background: "var(--color-sage-tint)",
+                  border: "1px solid var(--color-sage-border)",
+                }}
+              >
+                <span className="rounded-circle bg-success pulse-sage d-inline-block" style={{ width: "8px", height: "8px", background: "var(--color-sage) !important" }} />
+                <small className="fw-semibold text-sage" style={{ fontSize: "0.8rem" }}>
+                  Mother's Kitchen Portal
+                </small>
+              </div>
+
+              <h1 className="fw-bold mb-2" style={{ fontSize: "1.85rem", color: "var(--text-main)" }}>
+                Welcome back, {user?.name}! 👩‍🍳
+              </h1>
+
+              <p className="text-muted mb-0" style={{ fontSize: "0.98rem", maxWidth: "600px" }}>
+                Quickly request missing pantry ingredients and keep tabs on family shopping fulfillments.
+              </p>
+            </div>
+
+            <div
+              className="text-md-end px-3 py-2 rounded-3"
+              style={{
+                background: "#ffffff",
+                border: "1px solid var(--border-card)",
+                boxShadow: "var(--shadow-xs)",
+              }}
+            >
+              <small className="text-muted d-block" style={{ fontSize: "0.72rem", letterSpacing: "0.04em" }}>TODAY</small>
+              <span className="fw-semibold text-main" style={{ fontSize: "0.92rem" }}>
+                {today}
+              </span>
+            </div>
           </div>
-
-          <h1 className="fw-bold text-light mb-2" style={{ fontSize: "2rem" }}>
-            Welcome back, {user?.name}! 👋
-          </h1>
-
-          <p className="text-secondary mb-0" style={{ fontSize: "1rem" }}>
-            Quickly check pantry stock and request essential ingredients for the kitchen.
-          </p>
         </div>
       </div>
 
-      {/* Statistics Cards */}
-      <div className="row g-4 mb-4">
+      {/* Summary Stat Cards */}
+      <div className="row g-3 g-md-4 mb-4">
         <div className="col-md-4">
           <div
-            className="card dashboard-card h-100"
-            style={{ cursor: "pointer" }}
+            className="stat-card"
             onClick={() => navigate("/mother/all-requests")}
           >
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <span className="text-secondary fw-semibold d-block mb-1" style={{ fontSize: "0.88rem" }}>
-                    Total Requests
-                  </span>
-                  <h2 className="fw-bold text-light mb-0">{stats.total}</h2>
-                  <small className="text-primary mt-2 d-inline-flex align-items-center gap-1" style={{ fontSize: "0.8rem" }}>
-                    <i className="bi bi-list-check"></i> View all requests
-                  </small>
-                </div>
-                <div className="icon-box bg-primary text-white">
-                  <i className="bi bi-cart3 fs-4"></i>
-                </div>
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <span className="text-muted fw-semibold d-block mb-1" style={{ fontSize: "0.86rem" }}>
+                  Total Requests
+                </span>
+                <div className="stat-number">{stats.total}</div>
+                <small className="fw-semibold mt-1 d-inline-flex align-items-center gap-1" style={{ fontSize: "0.82rem", color: "#2563eb" }}>
+                  <i className="bi bi-list-check"></i> View full history
+                </small>
+              </div>
+              <div className="stat-icon-wrapper stat-icon-blue">
+                <i className="bi bi-cart3 fs-4"></i>
               </div>
             </div>
           </div>
@@ -107,24 +135,23 @@ function Dashboard() {
 
         <div className="col-md-4">
           <div
-            className="card dashboard-card h-100"
-            style={{ cursor: "pointer" }}
+            className="stat-card"
             onClick={() => setShowPendingModal(true)}
           >
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <span className="text-secondary fw-semibold d-block mb-1" style={{ fontSize: "0.88rem" }}>
-                    Pending Requests
-                  </span>
-                  <h2 className="fw-bold text-warning mb-0">{stats.pending}</h2>
-                  <small className="text-warning mt-2 d-inline-flex align-items-center gap-1" style={{ fontSize: "0.8rem" }}>
-                    <i className="bi bi-clock"></i> View pending list
-                  </small>
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <span className="text-muted fw-semibold d-block mb-1" style={{ fontSize: "0.86rem" }}>
+                  Pending Requests
+                </span>
+                <div className="stat-number" style={{ color: "var(--color-amber)" }}>
+                  {stats.pending}
                 </div>
-                <div className="icon-box bg-warning text-white">
-                  <i className="bi bi-hourglass-split fs-4"></i>
-                </div>
+                <small className="fw-semibold mt-1 d-inline-flex align-items-center gap-1" style={{ fontSize: "0.82rem", color: "var(--color-amber)" }}>
+                  <i className="bi bi-clock"></i> View waiting list
+                </small>
+              </div>
+              <div className="stat-icon-wrapper stat-icon-amber">
+                <i className="bi bi-hourglass-split fs-4"></i>
               </div>
             </div>
           </div>
@@ -132,24 +159,23 @@ function Dashboard() {
 
         <div className="col-md-4">
           <div
-            className="card dashboard-card h-100"
-            style={{ cursor: "pointer" }}
+            className="stat-card"
             onClick={() => navigate("/mother/history")}
           >
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <span className="text-secondary fw-semibold d-block mb-1" style={{ fontSize: "0.88rem" }}>
-                    Purchased
-                  </span>
-                  <h2 className="fw-bold text-emerald mb-0">{stats.purchased}</h2>
-                  <small className="text-emerald mt-2 d-inline-flex align-items-center gap-1" style={{ fontSize: "0.8rem" }}>
-                    <i className="bi bi-check2-all"></i> View history
-                  </small>
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <span className="text-muted fw-semibold d-block mb-1" style={{ fontSize: "0.86rem" }}>
+                  Purchased Items
+                </span>
+                <div className="stat-number" style={{ color: "var(--color-sage)" }}>
+                  {stats.purchased}
                 </div>
-                <div className="icon-box bg-success text-white">
-                  <i className="bi bi-bag-check fs-4"></i>
-                </div>
+                <small className="text-sage fw-semibold mt-1 d-inline-flex align-items-center gap-1" style={{ fontSize: "0.82rem" }}>
+                  <i className="bi bi-check2-all"></i> View completed
+                </small>
+              </div>
+              <div className="stat-icon-wrapper stat-icon-sage">
+                <i className="bi bi-bag-check fs-4"></i>
               </div>
             </div>
           </div>
@@ -157,11 +183,11 @@ function Dashboard() {
       </div>
 
       {/* Recent Shopping Requests */}
-      <div className="card shadow-sm border-0">
+      <div className="card">
         <div className="card-header d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center gap-2">
-            <i className="bi bi-cart-check-fill text-success"></i>
-            <h5 className="mb-0 fw-bold text-light" style={{ fontSize: "1.1rem" }}>
+            <i className="bi bi-cart-check-fill text-sage"></i>
+            <h5 className="mb-0 fw-bold" style={{ fontSize: "1.05rem", color: "var(--text-main)" }}>
               Recent Shopping Requests
             </h5>
           </div>
@@ -179,21 +205,20 @@ function Dashboard() {
               <div
                 className="rounded-circle d-inline-flex justify-content-center align-items-center p-3 mb-3"
                 style={{
-                  background: "rgba(255, 255, 255, 0.04)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                  color: "#94a3b8",
+                  background: "var(--color-sage-tint)",
+                  color: "var(--color-sage)",
                 }}
               >
                 <i className="bi bi-cart-x fs-1"></i>
               </div>
-              <h5 className="mt-2 text-light fw-bold">No Requests Yet</h5>
-              <p className="text-secondary mb-0" style={{ fontSize: "0.9rem" }}>
+              <h5 className="mt-2 fw-bold" style={{ color: "var(--text-main)" }}>No Requests Yet</h5>
+              <p className="text-muted mb-0" style={{ fontSize: "0.9rem" }}>
                 Add out-of-stock items to your shopping list to get started.
               </p>
             </div>
           ) : (
-            <div className="table-responsive">
-              <table className="table table-hover align-middle mb-0">
+            <div className="table-responsive border-0">
+              <table className="table align-middle mb-0">
                 <thead>
                   <tr>
                     <th>Item</th>
@@ -204,19 +229,19 @@ function Dashboard() {
                 <tbody>
                   {recentRequests.map((request) => (
                     <tr key={request.id}>
-                      <td className="fw-semibold text-light">
-                        <i className="bi bi-basket2 me-2 text-warning"></i>
+                      <td className="fw-semibold" style={{ color: "var(--text-main)" }}>
+                        <i className="bi bi-basket2 me-2" style={{ color: "var(--color-amber)" }}></i>
                         {request.itemName}
                       </td>
 
                       <td>
                         {request.status === "Pending" ? (
-                          <span className="badge bg-warning rounded-pill text-dark">
+                          <span className="badge bg-warning">
                             <i className="bi bi-hourglass-split me-1"></i>
                             Pending
                           </span>
                         ) : (
-                          <span className="badge bg-success rounded-pill">
+                          <span className="badge bg-success">
                             <i className="bi bi-check2-circle me-1"></i>
                             Purchased
                           </span>

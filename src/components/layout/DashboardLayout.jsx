@@ -1,20 +1,17 @@
 import { useState } from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
+import BottomNavigation from "./BottomNavigation";
 
 function DashboardLayout({ children, search, setSearch }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="d-flex position-relative" style={{ minHeight: "100vh" }}>
-      {/* Ambient Glow Background Mesh */}
-      <div className="ambient-glow-mesh">
-        <div className="ambient-orb ambient-orb-1" />
-        <div className="ambient-orb ambient-orb-2" />
-        <div className="ambient-orb ambient-orb-3" />
-      </div>
+    <div className="d-flex position-relative" style={{ minHeight: "100vh", backgroundColor: "var(--bg-main)" }}>
+      {/* Ambient background mesh */}
+      <div className="kitchen-ambient-mesh" />
 
-      {/* Sidebar */}
+      {/* Desktop/Tablet Sidebar */}
       <Sidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
@@ -32,7 +29,7 @@ function DashboardLayout({ children, search, setSearch }) {
           zIndex: 1,
         }}
       >
-        {/* Glass Navbar */}
+        {/* Top Navbar */}
         <Navbar
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
@@ -40,19 +37,23 @@ function DashboardLayout({ children, search, setSearch }) {
           setSearch={setSearch}
         />
 
-        {/* Page Content */}
+        {/* Page Content Container with Mobile Bottom Nav Padding */}
         <main
-          className="container-fluid px-2 py-3 px-sm-3 px-md-4 px-xl-5 py-md-4 flex-grow-1 page-fade-in"
+          className="container-fluid px-3 py-3 px-sm-4 px-md-4 px-xl-5 py-md-4 flex-grow-1 page-fade-in"
           style={{
-            maxWidth: "1600px",
+            maxWidth: "1500px",
             margin: "0 auto",
             width: "100%",
             minWidth: 0,
+            paddingBottom: "96px", // Ensure mobile bottom nav doesn't cover content
           }}
         >
           {children}
         </main>
       </div>
+
+      {/* Mobile Fixed Bottom Navigation Bar */}
+      <BottomNavigation />
     </div>
   );
 }

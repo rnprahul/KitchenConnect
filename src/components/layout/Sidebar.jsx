@@ -1,9 +1,9 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import logo from "../../assets/images/logo.png";
 
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const { user } = useAuth();
-
   const role = user?.role?.toLowerCase();
 
   const adminMenu = [
@@ -13,9 +13,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
       icon: "bi-grid-1x2-fill",
     },
     {
-      name: "Kitchen Items",
+      name: "Kitchen Pantry",
       path: "/admin/items",
-      icon: "bi-basket-fill",
+      icon: "bi-basket2-fill",
     },
     {
       name: "Shopping Requests",
@@ -31,17 +31,22 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
   const motherMenu = [
     {
-      name: "Dashboard",
+      name: "Kitchen Dashboard",
       path: "/mother",
       icon: "bi-grid-1x2-fill",
     },
     {
-      name: "Shopping Requests",
+      name: "Request Items",
       path: "/mother/requests",
-      icon: "bi-cart-fill",
+      icon: "bi-cart-plus-fill",
     },
     {
-      name: "Purchase History",
+      name: "All Requests",
+      path: "/mother/all-requests",
+      icon: "bi-list-check",
+    },
+    {
+      name: "Purchase Log",
       path: "/mother/history",
       icon: "bi-clock-history",
     },
@@ -49,12 +54,12 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
   const fatherMenu = [
     {
-      name: "Dashboard",
+      name: "Shopping Home",
       path: "/father",
       icon: "bi-grid-1x2-fill",
     },
     {
-      name: "Pending Requests",
+      name: "Items to Buy",
       path: "/father/requests",
       icon: "bi-cart-check-fill",
     },
@@ -66,86 +71,91 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
   ];
 
   let menu = [];
-
-  if (role === "admin") {
-    menu = adminMenu;
-  } else if (role === "mother") {
-    menu = motherMenu;
-  } else if (role === "father") {
-    menu = fatherMenu;
-  }
+  if (role === "admin") menu = adminMenu;
+  else if (role === "mother") menu = motherMenu;
+  else if (role === "father") menu = fatherMenu;
 
   return (
     <>
-      {/* Dark Frosted Overlay (Mobile Only) */}
+      {/* Backdrop (Mobile Only) */}
       {sidebarOpen && (
         <div
           className="d-lg-none position-fixed top-0 start-0 w-100 h-100"
           style={{
-            background: "rgba(3, 7, 12, 0.6)",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
+            background: "rgba(30, 41, 34, 0.45)",
+            backdropFilter: "blur(6px)",
+            WebkitBackdropFilter: "blur(6px)",
             zIndex: 1040,
-            transition: "all 0.3s ease",
+            transition: "all 0.25s ease",
           }}
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* Glassmorphic Sidebar */}
+      {/* Sidebar Aside */}
       <aside
         className={`glass-sidebar d-flex flex-column p-3 ${
           sidebarOpen ? "sidebar-open" : ""
         }`}
       >
-        {/* Sidebar Header */}
+        {/* Sidebar Header / Brand */}
         <div className="d-flex justify-content-between align-items-center mb-4 px-2 pt-2">
           <div className="d-flex align-items-center gap-2">
             <div
-              className="rounded-3 d-flex align-items-center justify-content-center"
+              className="rounded-3 d-flex align-items-center justify-content-center p-1"
               style={{
-                width: "36px",
-                height: "36px",
-                background: "linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.15) 100%)",
-                border: "1px solid rgba(52, 211, 153, 0.4)",
-                color: "#34d399",
+                width: "38px",
+                height: "38px",
+                background: "var(--color-sage-tint)",
+                border: "1px solid var(--color-sage-border)",
               }}
             >
-              <i className="bi bi-egg-fried fs-5"></i>
+              <img
+                src={logo}
+                alt="Logo"
+                style={{ width: "24px", height: "24px", objectFit: "contain" }}
+              />
             </div>
             <div>
               <h5
-                className="mb-0 fw-bold text-light"
+                className="mb-0 fw-bold"
                 style={{
                   letterSpacing: "-0.02em",
+                  fontSize: "1.15rem",
+                  color: "var(--text-main)",
                 }}
               >
-                Kitchen<span className="text-emerald">Connect</span>
+                Kitchen<span className="text-sage">Connect</span>
               </h5>
+              <small className="text-muted d-block" style={{ fontSize: "0.72rem" }}>
+                Smart Pantry & Grocery
+              </small>
             </div>
           </div>
 
           <button
-            className="btn btn-sm btn-light d-lg-none rounded-circle"
-            style={{ width: "32px", height: "32px", padding: 0 }}
+            type="button"
+            className="btn btn-sm btn-light d-lg-none rounded-circle d-flex align-items-center justify-content-center"
+            style={{ width: "36px", height: "36px", padding: 0 }}
             onClick={() => setSidebarOpen(false)}
+            aria-label="Close Navigation Menu"
           >
-            ✕
+            <i className="bi bi-x-lg fs-6"></i>
           </button>
         </div>
 
-        {/* Section Label */}
+        {/* Navigation Category Label */}
         <div className="px-3 mb-2">
           <small
             className="text-uppercase fw-bold text-muted"
-            style={{ fontSize: "0.7rem", letterSpacing: "0.08em" }}
+            style={{ fontSize: "0.68rem", letterSpacing: "0.08em" }}
           >
-            Main Navigation
+            Kitchen Navigation
           </small>
         </div>
 
         {/* Navigation List */}
-        <ul className="nav flex-column gap-2 mb-auto px-1">
+        <ul className="nav flex-column gap-1 mb-auto px-1">
           {menu.map((item) => (
             <li className="nav-item" key={item.path}>
               <NavLink
@@ -153,24 +163,19 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 end={item.path === `/${role}`}
                 onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
-                  `nav-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 ${
-                    isActive ? "glass-nav-active" : "glass-nav-inactive"
+                  `nav-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none ${
+                    isActive ? "kitchen-nav-active" : "kitchen-nav-inactive"
                   }`
                 }
                 style={({ isActive }) => ({
-                  transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
-                  fontSize: "0.92rem",
+                  transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+                  fontSize: "0.9rem",
                   fontWeight: isActive ? "600" : "500",
-                  color: isActive ? "#ffffff" : "#94a3b8",
-                  background: isActive
-                    ? "linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.12) 100%)"
-                    : "transparent",
+                  color: isActive ? "var(--color-sage)" : "var(--text-muted)",
+                  background: isActive ? "var(--color-sage-tint)" : "transparent",
                   border: isActive
-                    ? "1px solid rgba(52, 211, 153, 0.4)"
+                    ? "1px solid var(--color-sage-border)"
                     : "1px solid transparent",
-                  boxShadow: isActive
-                    ? "0 4px 20px rgba(16, 185, 129, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.15)"
-                    : "none",
                 })}
               >
                 <i
@@ -185,43 +190,44 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
           ))}
         </ul>
 
-        {/* Bottom Profile Chip */}
+        {/* User Card at bottom of sidebar */}
         <div
-          className="p-3 rounded-4 mt-auto"
+          className="p-3 rounded-3 mt-auto"
           style={{
-            background: "rgba(255, 255, 255, 0.03)",
-            border: "1px solid rgba(255, 255, 255, 0.08)",
+            background: "var(--bg-main)",
+            border: "1px solid var(--border-card)",
           }}
         >
-          <div className="d-flex align-items-center gap-3">
+          <div className="d-flex align-items-center gap-2">
             <div
               className="rounded-circle d-flex justify-content-center align-items-center text-white fw-bold"
               style={{
-                width: "40px",
-                height: "40px",
-                background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-                boxShadow: "0 0 12px rgba(16, 185, 129, 0.35)",
+                width: "36px",
+                height: "36px",
+                background: "var(--color-sage)",
+                fontSize: "14px",
+                flexShrink: 0,
               }}
             >
               {user?.name?.charAt(0).toUpperCase()}
             </div>
             <div className="overflow-hidden" style={{ lineHeight: 1.2 }}>
-              <div className="fw-semibold text-truncate text-light" style={{ fontSize: "0.9rem" }}>
+              <div className="fw-semibold text-truncate" style={{ fontSize: "0.86rem", color: "var(--text-main)" }}>
                 {user?.name}
               </div>
-              <small className="text-secondary text-capitalize" style={{ fontSize: "0.75rem" }}>
-                {user?.role} Mode
+              <small className="text-muted text-capitalize" style={{ fontSize: "0.72rem" }}>
+                {user?.role} Portal
               </small>
             </div>
           </div>
         </div>
       </aside>
 
-      {/* Desktop Spacer */}
+      {/* Desktop Space Placeholder */}
       <div
         className="d-none d-lg-block"
         style={{
-          width: "270px",
+          width: "260px",
           flexShrink: 0,
         }}
       />

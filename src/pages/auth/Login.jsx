@@ -67,31 +67,27 @@ function Login() {
   };
 
   return (
-    <div className="login-page position-relative overflow-hidden">
-      {/* Dynamic Ambient Background Glows */}
-      <div className="login-ambient-mesh">
-        <div className="login-orb login-orb-1" />
-        <div className="login-orb login-orb-2" />
-        <div className="login-orb login-orb-3" />
-      </div>
+    <div className="kitchen-login-page position-relative overflow-hidden">
+      {/* Ambient background mesh */}
+      <div className="kitchen-ambient-mesh" />
 
-      {/* Glassmorphic Login Card */}
-      <div className="login-card position-relative glass-shimmer">
+      {/* Warm Kitchen Card */}
+      <div className="kitchen-login-card position-relative">
         <div className="text-center mb-4">
-          <div className="logo-glow-wrapper mb-3">
+          <div className="login-logo-badge mb-3">
             <img
               src={logo}
               alt="KitchenConnect Logo"
-              className="logo"
+              className="login-logo"
             />
           </div>
 
-          <h1 className="login-title mb-1">
-            Kitchen<span className="text-emerald">Connect</span>
+          <h1 className="login-brand-title mb-1">
+            Kitchen<span className="text-sage">Connect</span>
           </h1>
 
-          <p className="login-subtitle">
-            Smart Kitchen Inventory & Shopping Assistant
+          <p className="login-brand-subtitle">
+            Smart Kitchen Inventory & Grocery Assistant
           </p>
         </div>
 
@@ -136,7 +132,7 @@ function Login() {
               <button
                 type="button"
                 className="btn btn-secondary border-start-0"
-                style={{ borderRadius: "0 12px 12px 0" }}
+                style={{ borderRadius: "0 var(--radius-md) var(--radius-md) 0" }}
                 onClick={() => setShowPassword(!showPassword)}
                 title={showPassword ? "Hide Password" : "Show Password"}
               >
@@ -150,14 +146,14 @@ function Login() {
           </div>
 
           <button
-            className="btn btn-success login-btn w-100 py-3"
+            className="btn btn-success login-submit-btn w-100 py-3"
             type="submit"
             disabled={loading}
           >
             {loading ? (
               <>
                 <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                Signing In...
+                Entering Kitchen...
               </>
             ) : (
               <>
@@ -168,14 +164,14 @@ function Login() {
           </button>
         </form>
 
-        <div className="login-footer text-center mt-4 pt-3 border-top" style={{ borderColor: "rgba(255, 255, 255, 0.08)" }}>
-          <small className="text-secondary">
-            Developed by <strong className="text-emerald">Rahul N P</strong>
+        <div className="login-footer text-center mt-4 pt-3 border-top" style={{ borderColor: "var(--border-subtle)" }}>
+          <small className="text-muted">
+            Developed by <strong className="text-sage">Rahul N P</strong>
           </small>
         </div>
       </div>
 
-      <ToastContainer position="top-center" theme="dark" />
+      <ToastContainer position="top-center" theme="light" />
     </div>
   );
 }

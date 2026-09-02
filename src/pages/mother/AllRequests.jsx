@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { useAuth } from "../../context/AuthContext";
 import { getRequestsByUser } from "../../services/requestService";
+import StatusBadge from "../../components/common/StatusBadge";
 
 function AllRequests() {
   const { user } = useAuth();
@@ -30,106 +31,144 @@ function AllRequests() {
     <DashboardLayout>
       {/* Header */}
       <div className="mb-4">
-        <div className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2" style={{ background: "rgba(59, 130, 246, 0.12)", border: "1px solid rgba(96, 165, 250, 0.3)" }}>
-          <i className="bi bi-list-check text-primary"></i>
-          <small className="text-primary fw-semibold" style={{ fontSize: "0.8rem" }}>
-            All Shopping History
+        <div
+          className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2"
+          style={{
+            background: "var(--color-sage-tint)",
+            border: "1px solid var(--color-sage-border)",
+          }}
+        >
+          <i className="bi bi-list-check text-sage"></i>
+          <small className="fw-semibold text-sage" style={{ fontSize: "0.8rem" }}>
+            Shopping Archive
           </small>
         </div>
 
-        <h2 className="fw-bold text-light mb-1">
+        <h2 className="fw-bold mb-1" style={{ color: "var(--text-main)" }}>
           All Shopping Requests
         </h2>
 
-        <p className="text-secondary mb-0" style={{ fontSize: "0.95rem" }}>
-          View full archive of your requested kitchen ingredients and current fulfillment state.
+        <p className="text-muted mb-0" style={{ fontSize: "0.95rem" }}>
+          View the complete history of your requested kitchen ingredients and their purchase fulfillment.
         </p>
       </div>
 
       {/* Card */}
-      <div className="card shadow-sm border-0">
+      <div className="card">
         <div className="card-header d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center gap-2">
-            <i className="bi bi-cart3 text-success"></i>
-            <h5 className="mb-0 fw-bold text-light" style={{ fontSize: "1.1rem" }}>
+            <i className="bi bi-cart3 text-sage"></i>
+            <h5 className="mb-0 fw-bold" style={{ fontSize: "1.05rem", color: "var(--text-main)" }}>
               Request History
             </h5>
           </div>
-          <span className="badge bg-secondary rounded-pill">
+          <span className="badge bg-secondary">
             {requests.length} Requests Total
           </span>
         </div>
 
-        <div className="card-body p-0">
-          {loading ? (
-            <div className="text-center py-5">
-              <div
-                className="spinner-border text-success"
-                role="status"
-                style={{ width: "3rem", height: "3rem" }}
-              >
-                <span className="visually-hidden">Loading...</span>
-              </div>
-              <p className="mt-3 text-secondary mb-0">
-                Loading requests...
-              </p>
+        {loading ? (
+          <div className="text-center py-5">
+            <div
+              className="spinner-border text-success"
+              role="status"
+              style={{ width: "2.5rem", height: "2.5rem", color: "var(--color-sage) !important" }}
+            >
+              <span className="visually-hidden">Loading...</span>
             </div>
-          ) : requests.length === 0 ? (
-            <div className="text-center py-5">
-              <div
-                className="rounded-circle d-inline-flex justify-content-center align-items-center p-3 mb-3"
-                style={{
-                  background: "rgba(255, 255, 255, 0.04)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                  color: "#94a3b8",
-                }}
-              >
-                <i className="bi bi-cart-x fs-1"></i>
-              </div>
-              <h5 className="mt-2 text-light fw-bold">No Requests Found</h5>
-              <p className="text-secondary mb-0" style={{ fontSize: "0.9rem" }}>
-                You have not submitted any shopping requests yet.
-              </p>
+            <p className="mt-3 text-muted mb-0">
+              Loading requests archive...
+            </p>
+          </div>
+        ) : requests.length === 0 ? (
+          <div className="text-center py-5">
+            <div
+              className="rounded-circle d-inline-flex justify-content-center align-items-center p-3 mb-3"
+              style={{
+                background: "var(--color-sage-tint)",
+                color: "var(--color-sage)",
+              }}
+            >
+              <i className="bi bi-cart-x fs-1"></i>
             </div>
-          ) : (
-            <div className="table-responsive">
-              <table className="table table-hover align-middle mb-0">
-                <thead>
-                  <tr>
-                    <th width="60" className="text-center">#</th>
-                    <th>Requested Item</th>
-                    <th width="160">Status</th>
-                    <th width="200">Requested Date</th>
-                  </tr>
-                </thead>
+            <h5 className="mt-2 fw-bold" style={{ color: "var(--text-main)" }}>No Requests Found</h5>
+            <p className="text-muted mb-0" style={{ fontSize: "0.9rem" }}>
+              You have not submitted any shopping requests yet.
+            </p>
+          </div>
+        ) : (
+          <>
+            {/* Desktop Table View */}
+            <div className="card-body p-0 d-none d-md-block">
+              <div className="table-responsive border-0">
+                <table className="table align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th width="60" className="text-center">#</th>
+                      <th>Requested Item</th>
+                      <th width="160">Status</th>
+                      <th width="200">Requested Date</th>
+                    </tr>
+                  </thead>
 
-                <tbody>
-                  {requests.map((request, index) => (
-                    <tr key={request.id}>
-                      <td className="text-center text-secondary fw-semibold">
-                        {index + 1}
-                      </td>
+                  <tbody>
+                    {requests.map((request, index) => (
+                      <tr key={request.id}>
+                        <td className="text-center text-muted fw-semibold">
+                          {index + 1}
+                        </td>
 
-                      <td className="fw-semibold text-light">
-                        <i className="bi bi-basket2 text-warning me-2"></i>
-                        {request.itemName}
-                      </td>
+                        <td className="fw-semibold" style={{ color: "var(--text-main)" }}>
+                          <i className="bi bi-basket2 me-2" style={{ color: "var(--color-amber)" }}></i>
+                          {request.itemName}
+                        </td>
 
-                      <td>
-                        {request.status === "Pending" ? (
-                          <span className="badge bg-warning text-dark px-3 py-2">
-                            <i className="bi bi-hourglass-split me-1"></i>
-                            Pending
-                          </span>
-                        ) : (
-                          <span className="badge bg-success px-3 py-2">
-                            <i className="bi bi-check2-circle me-1"></i>
-                            Purchased
-                          </span>
-                        )}
-                      </td>
+                        <td>
+                          <StatusBadge status={request.status} />
+                        </td>
 
-                      <td className="text-secondary">
+                        <td className="text-muted">
+                          {request.requestedAt?.toDate
+                            ? request.requestedAt.toDate().toLocaleDateString("en-IN", {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              })
+                            : "—"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Mobile Card List View */}
+            <div className="card-body p-3 d-md-none">
+              <div className="d-flex flex-column gap-2">
+                {requests.map((request, index) => (
+                  <div
+                    key={request.id}
+                    className="pantry-card p-3 rounded-3"
+                    style={{
+                      background: "var(--bg-main)",
+                      border: "1px solid var(--border-card)",
+                    }}
+                  >
+                    <div className="d-flex justify-content-between align-items-start mb-2">
+                      <div>
+                        <small className="text-muted fw-semibold d-block mb-1">#{index + 1}</small>
+                        <h6 className="fw-bold mb-0" style={{ color: "var(--text-main)" }}>
+                          <i className="bi bi-basket2 me-2" style={{ color: "var(--color-amber)" }}></i>
+                          {request.itemName}
+                        </h6>
+                      </div>
+                      <StatusBadge status={request.status} size="sm" />
+                    </div>
+
+                    <div className="text-muted pt-2 border-top d-flex justify-content-between align-items-center" style={{ borderColor: "var(--border-subtle)", fontSize: "0.8rem" }}>
+                      <span>Requested:</span>
+                      <span className="fw-medium">
                         {request.requestedAt?.toDate
                           ? request.requestedAt.toDate().toLocaleDateString("en-IN", {
                               day: "2-digit",
@@ -137,14 +176,14 @@ function AllRequests() {
                               year: "numeric",
                             })
                           : "—"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
     </DashboardLayout>
   );
