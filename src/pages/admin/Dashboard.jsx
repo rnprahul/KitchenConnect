@@ -11,6 +11,7 @@ import {
 } from "../../services/requestService";
 
 import PendingRequestModal from "../../components/dashboard/PendingRequestModal";
+import QuantityBadge from "../../components/common/QuantityBadge";
 
 function Dashboard() {
   const { user } = useAuth();
@@ -261,6 +262,7 @@ function Dashboard() {
                       <span className="me-2">🛒</span>
                       <span className="text-muted">{activity.requestedBy}</span> requested{" "}
                       <strong className="text-sage">{activity.itemName}</strong>
+                      <QuantityBadge quantity={activity.quantity} unit={activity.unit} />
                     </div>
 
                     <small className="text-muted" style={{ fontSize: "0.78rem" }}>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { subscribeToPurchaseHistory } from "../../services/requestService";
+import QuantityBadge from "../../components/common/QuantityBadge";
+import { filterAndSortBySearch } from "../../utils/searchUtils";
 
 function FatherPurchaseHistory() {
   const [history, setHistory] = useState([]);
@@ -16,14 +18,11 @@ function FatherPurchaseHistory() {
     return () => unsubscribe();
   }, []);
 
-  const filteredHistory = history.filter(
-    (purchase) =>
-      purchase.itemName.toLowerCase().includes(search.toLowerCase()) ||
-      (purchase.requestedBy &&
-        purchase.requestedBy.toLowerCase().includes(search.toLowerCase())) ||
-      (purchase.purchasedBy &&
-        purchase.purchasedBy.toLowerCase().includes(search.toLowerCase()))
-  );
+  const filteredHistory = filterAndSortBySearch(history, search, [
+    "itemName",
+    "requestedBy",
+    "purchasedBy",
+  ]);
 
   return (
     <DashboardLayout search={search} setSearch={setSearch}>
@@ -160,6 +159,11 @@ function FatherPurchaseHistory() {
                             <strong style={{ color: "var(--text-main)" }}>
                               {purchase.itemName}
                             </strong>
+                            <QuantityBadge
+                              quantity={purchase.quantity}
+                              unit={purchase.unit}
+                              variant="sage"
+                            />
                           </div>
                         </td>
 
@@ -198,8 +202,14 @@ function FatherPurchaseHistory() {
                     <div className="d-flex justify-content-between align-items-start mb-2">
                       <div>
                         <small className="text-muted fw-semibold d-block mb-1">#{index + 1}</small>
-                        <h6 className="fw-bold mb-0" style={{ color: "var(--text-main)", fontSize: "1.05rem" }}>
-                          {purchase.itemName}
+                        <h6 className="fw-bold mb-0 d-flex align-items-center flex-wrap" style={{ color: "var(--text-main)", fontSize: "1.05rem" }}>
+                          <span>{purchase.itemName}</span>
+                          <QuantityBadge
+                            quantity={purchase.quantity}
+                            unit={purchase.unit}
+                            variant="sage"
+                            size="sm"
+                          />
                         </h6>
                       </div>
                       <span className="badge bg-success" style={{ fontSize: "0.72rem" }}>

@@ -1,22 +1,18 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import PendingRequestModal from "../../components/dashboard/PendingRequestModal";
 import { useNavigate } from "react-router-dom";
 
 import DashboardLayout from "../../components/layout/DashboardLayout";
+import QuantityBadge from "../../components/common/QuantityBadge";
 
 import {
   subscribeToDashboardStats,
   subscribeToRecentActivity,
-  getRequestsByUser,
 } from "../../services/requestService";
 
 function Dashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
-
-  const [showPendingModal, setShowPendingModal] = useState(false);
-  const [pendingRequests, setPendingRequests] = useState([]);
 
   const [stats, setStats] = useState({
     total: 0,
@@ -40,15 +36,6 @@ function Dashboard() {
     const unsubscribeRecent = subscribeToRecentActivity((data) => {
       setRecentRequests(data.slice(0, 5));
     });
-
-    const loadPendingRequests = async () => {
-      const userRequests = await getRequestsByUser(user.name);
-      setPendingRequests(
-        userRequests.filter((request) => request.status === "Pending")
-      );
-    };
-
-    loadPendingRequests();
 
     return () => {
       unsubscribeStats();
@@ -136,7 +123,7 @@ function Dashboard() {
         <div className="col-md-4">
           <div
             className="stat-card"
-            onClick={() => setShowPendingModal(true)}
+            onClick={() => navigate("/mother/pending-requests")}
           >
             <div className="d-flex justify-content-between align-items-center">
               <div>
@@ -147,7 +134,7 @@ function Dashboard() {
                   {stats.pending}
                 </div>
                 <small className="fw-semibold mt-1 d-inline-flex align-items-center gap-1" style={{ fontSize: "0.82rem", color: "var(--color-amber)" }}>
-                  <i className="bi bi-clock"></i> View waiting list
+                  <i className="bi bi-clock"></i> View & edit counts
                 </small>
               </div>
               <div className="stat-icon-wrapper stat-icon-amber">
@@ -231,7 +218,8 @@ function Dashboard() {
                     <tr key={request.id}>
                       <td className="fw-semibold" style={{ color: "var(--text-main)" }}>
                         <i className="bi bi-basket2 me-2" style={{ color: "var(--color-amber)" }}></i>
-                        {request.itemName}
+                        <span>{request.itemName}</span>
+                        <QuantityBadge quantity={request.quantity} unit={request.unit} />
                       </td>
 
                       <td>
@@ -256,11 +244,6 @@ function Dashboard() {
         </div>
       </div>
 
-      <PendingRequestModal
-        show={showPendingModal}
-        onClose={() => setShowPendingModal(false)}
-        requests={pendingRequests}
-      />
     </DashboardLayout>
   );
 }

@@ -41,6 +41,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
       icon: "bi-cart-plus-fill",
     },
     {
+      name: "Pending Requests",
+      path: "/mother/pending-requests",
+      icon: "bi-hourglass-split",
+    },
+    {
       name: "All Requests",
       path: "/mother/all-requests",
       icon: "bi-list-check",

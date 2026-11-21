@@ -4,6 +4,7 @@ import DashboardLayout from "../../components/layout/DashboardLayout";
 import { useAuth } from "../../context/AuthContext";
 import { getRequestsByUser } from "../../services/requestService";
 import StatusBadge from "../../components/common/StatusBadge";
+import QuantityBadge from "../../components/common/QuantityBadge";
 
 function AllRequests() {
   const { user } = useAuth();
@@ -120,7 +121,8 @@ function AllRequests() {
 
                         <td className="fw-semibold" style={{ color: "var(--text-main)" }}>
                           <i className="bi bi-basket2 me-2" style={{ color: "var(--color-amber)" }}></i>
-                          {request.itemName}
+                          <span>{request.itemName}</span>
+                          <QuantityBadge quantity={request.quantity} unit={request.unit} />
                         </td>
 
                         <td>
@@ -158,9 +160,10 @@ function AllRequests() {
                     <div className="d-flex justify-content-between align-items-start mb-2">
                       <div>
                         <small className="text-muted fw-semibold d-block mb-1">#{index + 1}</small>
-                        <h6 className="fw-bold mb-0" style={{ color: "var(--text-main)" }}>
+                        <h6 className="fw-bold mb-0 d-flex align-items-center flex-wrap" style={{ color: "var(--text-main)" }}>
                           <i className="bi bi-basket2 me-2" style={{ color: "var(--color-amber)" }}></i>
-                          {request.itemName}
+                          <span>{request.itemName}</span>
+                          <QuantityBadge quantity={request.quantity} unit={request.unit} size="sm" />
                         </h6>
                       </div>
                       <StatusBadge status={request.status} size="sm" />

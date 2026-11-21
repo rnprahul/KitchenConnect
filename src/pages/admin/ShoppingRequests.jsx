@@ -34,9 +34,9 @@ function ShoppingRequests() {
     setShowDeleteModal(true);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (requestOrId) => {
     try {
-      await deleteRequest(id);
+      await deleteRequest(requestOrId);
       toast.success("Shopping request removed successfully");
       setShowDeleteModal(false);
       setSelectedRequest(null);

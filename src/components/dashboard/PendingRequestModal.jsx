@@ -1,3 +1,5 @@
+import QuantityBadge from "../common/QuantityBadge";
+
 function PendingRequestModal({
   show,
   onClose,
@@ -65,7 +67,8 @@ function PendingRequestModal({
                           <td className="text-muted fw-semibold">{index + 1}</td>
                           <td className="fw-semibold" style={{ color: "var(--text-main)" }}>
                             <i className="bi bi-basket me-2" style={{ color: "var(--color-amber)" }}></i>
-                            {request.itemName}
+                            <span>{request.itemName}</span>
+                            <QuantityBadge quantity={request.quantity} unit={request.unit} />
                           </td>
                           {showRequester && (
                             <td>

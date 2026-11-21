@@ -164,3 +164,14 @@
   box-shadow: var(--shadow-sm);
   border-color: #ded7cb;
 }
+
+/* Page Content Padding for Fixed Mobile Bottom Navigation */
+.dashboard-main-content {
+  padding-bottom: 2.5rem;
+}
+
+@media (max-width: 991.98px) {
+  .dashboard-main-content {
+    padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}

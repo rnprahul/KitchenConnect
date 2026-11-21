@@ -39,13 +39,12 @@ function DashboardLayout({ children, search, setSearch }) {
 
         {/* Page Content Container with Mobile Bottom Nav Padding */}
         <main
-          className="container-fluid px-3 py-3 px-sm-4 px-md-4 px-xl-5 py-md-4 flex-grow-1 page-fade-in"
+          className="container-fluid px-3 py-3 px-sm-4 px-md-4 px-xl-5 py-md-4 flex-grow-1 page-fade-in dashboard-main-content"
           style={{
             maxWidth: "1500px",
             margin: "0 auto",
             width: "100%",
             minWidth: 0,
-            paddingBottom: "96px", // Ensure mobile bottom nav doesn't cover content
           }}
         >
           {children}

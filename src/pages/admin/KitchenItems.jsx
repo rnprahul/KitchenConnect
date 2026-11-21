@@ -6,6 +6,7 @@ import DashboardLayout from "../../components/layout/DashboardLayout";
 import ItemTable from "../../components/items/ItemTable";
 import ItemFormModal from "../../components/items/ItemFormModal";
 import DeleteItemModal from "../../components/items/DeleteItemModal";
+import { filterAndSortBySearch } from "../../utils/searchUtils";
 
 import {
   addItem,
@@ -94,9 +95,7 @@ function KitchenItems() {
     }
   };
 
-  const filteredItems = items.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredItems = filterAndSortBySearch(items, search, "name");
 
   return (
     <DashboardLayout search={search} setSearch={setSearch}>

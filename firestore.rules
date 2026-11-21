@@ -64,10 +64,11 @@ service cloud.firestore {
       // Admin can update anything.
       //
       // Mother:
-      // Available -> Requested
+      // Available -> Requested (when creating a request)
+      // Requested -> Available (when removing a pending request)
       //
       // Father:
-      // Requested -> Available
+      // Requested -> Available (when completing purchase)
       allow update: if
         isAdmin()
 
@@ -75,8 +76,7 @@ service cloud.firestore {
 
         (
           isMother() &&
-          resource.data.status == "Available" &&
-          request.resource.data.status == "Requested" &&
+          request.resource.data.status in ["Available", "Requested"] &&
           request.resource.data.diff(resource.data)
             .affectedKeys()
             .hasOnly(["status"])
@@ -129,6 +129,9 @@ service cloud.firestore {
 
       // Admin can update requests.
       //
+      // Mother can:
+      // Update quantity on her own Pending requests.
+      //
       // Father can:
       // Pending -> Purchased
       //
@@ -136,6 +139,18 @@ service cloud.firestore {
       // because that is how the existing application displays it.
       allow update: if
         isAdmin()
+
+        ||
+
+        (
+          isMother() &&
+          resource.data.requestedById == request.auth.uid &&
+          resource.data.status == "Pending" &&
+          request.resource.data.status == "Pending" &&
+          request.resource.data.diff(resource.data)
+            .affectedKeys()
+            .hasOnly(["quantity", "unit"])
+        )
 
         ||
 

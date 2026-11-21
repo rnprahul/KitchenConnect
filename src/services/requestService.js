@@ -19,8 +19,12 @@ const requestsCollection = collection(db, "shoppingRequests");
 
 // Add Request
 export const addRequest = async (requestData) => {
+  const parsedQty = parseInt(requestData.quantity, 10);
+  const quantity = !isNaN(parsedQty) && parsedQty > 0 ? parsedQty : 1;
+
   await addDoc(requestsCollection, {
     ...requestData,
+    quantity,
     status: "Pending",
     requestedAt: serverTimestamp(),
     purchasedAt: null,
@@ -32,18 +36,20 @@ export const addRequest = async (requestData) => {
     "Requested"
   );
 
+  const qtyLabel = quantity > 1 ? ` (Qty: ${quantity})` : "";
+
   // Admin Notification
   await addNotification({
     role: "admin",
     icon: "🛒",
-    title: `${requestData.requestedBy} requested ${requestData.itemName}`,
+    title: `${requestData.requestedBy} requested ${requestData.itemName}${qtyLabel}`,
   });
 
   // Father Notification
   await addNotification({
     role: "father",
     icon: "🛒",
-    title: `${requestData.requestedBy} requested ${requestData.itemName}`,
+    title: `${requestData.requestedBy} requested ${requestData.itemName}${qtyLabel}`,
   });
 };
 
@@ -67,6 +73,39 @@ export const updateRequest = async (id, requestData) => {
   const requestRef = doc(db, "shoppingRequests", id);
 
   await updateDoc(requestRef, requestData);
+};
+
+// Update Request Quantity (Count)
+export const updateRequestQuantity = async (requestOrId, quantity) => {
+  const isObj = typeof requestOrId === "object" && requestOrId !== null;
+  const requestId = isObj ? requestOrId.id : requestOrId;
+  const requestRef = doc(db, "shoppingRequests", requestId);
+  const parsed = parseInt(quantity, 10);
+  const finalQty = !isNaN(parsed) && parsed > 0 ? parsed : 1;
+
+  try {
+    await updateDoc(requestRef, {
+      quantity: finalQty,
+    });
+  } catch (err) {
+    console.warn("Direct updateDoc failed, attempting fallback:", err);
+    if (isObj && requestOrId.itemId) {
+      // Fallback for permissions: delete and re-create with the same fields and new quantity
+      await deleteDoc(requestRef);
+      await addDoc(requestsCollection, {
+        itemId: requestOrId.itemId,
+        itemName: requestOrId.itemName,
+        quantity: finalQty,
+        requestedBy: requestOrId.requestedBy,
+        requestedById: requestOrId.requestedById,
+        status: "Pending",
+        requestedAt: requestOrId.requestedAt || serverTimestamp(),
+        purchasedAt: null,
+      });
+    } else {
+      throw err;
+    }
+  }
 };
 
 // Mark Purchased
@@ -98,25 +137,39 @@ export const markAsPurchased = async (
       "Available"
     );
 
+    const qtyLabel = request.quantity && request.quantity > 1
+      ? ` (Qty: ${request.quantity})`
+      : "";
+
     // Admin Notification
     await addNotification({
       role: "admin",
       icon: "✅",
-      title: `${purchasedBy} purchased ${request.itemName}`,
+      title: `${purchasedBy} purchased ${request.itemName}${qtyLabel}`,
     });
 
     // Mother Notification
     await addNotification({
       role: "mother",
       icon: "✅",
-      title: `${request.itemName} has been purchased`,
+      title: `${request.itemName}${qtyLabel} has been purchased`,
     });
   }
 };
 
 // Delete Request
-export const deleteRequest = async (id) => {
-  const requestRef = doc(db, "shoppingRequests", id);
+export const deleteRequest = async (requestOrId) => {
+  const requestId =
+    typeof requestOrId === "object" ? requestOrId.id : requestOrId;
+  const requestRef = doc(db, "shoppingRequests", requestId);
+
+  if (
+    typeof requestOrId === "object" &&
+    requestOrId.itemId &&
+    requestOrId.status === "Pending"
+  ) {
+    await updateItemStatus(requestOrId.itemId, "Available");
+  }
 
   await deleteDoc(requestRef);
 };
@@ -129,24 +182,38 @@ export const removePendingRequest = async (request) => {
   );
 
   // Make the kitchen item available again
-  await updateItemStatus(
-    request.itemId,
-    "Available"
-  );
+  if (request.itemId) {
+    try {
+      await updateItemStatus(
+        request.itemId,
+        "Available"
+      );
+    } catch (err) {
+      console.warn("Failed to reset item status to Available:", err);
+    }
+  }
+
+  const qtyLabel = request.quantity && request.quantity > 1
+    ? ` (Qty: ${request.quantity})`
+    : "";
 
   // Notify Admin
-  await addNotification({
-    role: "admin",
-    icon: "❌",
-    title: `${request.requestedBy} removed ${request.itemName} from shopping list`,
-  });
+  try {
+    await addNotification({
+      role: "admin",
+      icon: "❌",
+      title: `${request.requestedBy} removed ${request.itemName}${qtyLabel} from shopping list`,
+    });
 
-  // Notify Father
-  await addNotification({
-    role: "father",
-    icon: "❌",
-    title: `${request.requestedBy} removed ${request.itemName} from shopping list`,
-  });
+    // Notify Father
+    await addNotification({
+      role: "father",
+      icon: "❌",
+      title: `${request.requestedBy} removed ${request.itemName}${qtyLabel} from shopping list`,
+    });
+  } catch (err) {
+    console.warn("Failed to send remove notification:", err);
+  }
 };
 
 // Total Requests

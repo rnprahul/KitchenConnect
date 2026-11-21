@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { useAuth } from "../../context/AuthContext";
 import StatusBadge from "../../components/common/StatusBadge";
+import QuantityBadge from "../../components/common/QuantityBadge";
+import { filterAndSortBySearch } from "../../utils/searchUtils";
 
 import {
   subscribeToRequests,
@@ -41,12 +43,10 @@ function FatherShoppingRequests() {
     }
   };
 
-  const filteredRequests = requests.filter(
-    (request) =>
-      request.itemName.toLowerCase().includes(search.toLowerCase()) ||
-      (request.requestedBy &&
-        request.requestedBy.toLowerCase().includes(search.toLowerCase()))
-  );
+  const filteredRequests = filterAndSortBySearch(requests, search, [
+    "itemName",
+    "requestedBy",
+  ]);
 
   return (
     <DashboardLayout search={search} setSearch={setSearch}>
@@ -159,6 +159,11 @@ function FatherShoppingRequests() {
                               <i className="bi bi-basket2-fill" style={{ fontSize: "0.9rem" }}></i>
                             </span>
                             <span>{request.itemName}</span>
+                            <QuantityBadge
+                              quantity={request.quantity}
+                              unit={request.unit}
+                              variant="amber"
+                            />
                           </div>
                         </td>
 
@@ -227,9 +232,15 @@ function FatherShoppingRequests() {
                     <div className="d-flex justify-content-between align-items-start mb-2">
                       <div>
                         <small className="text-muted fw-semibold d-block mb-1">#{index + 1}</small>
-                        <h6 className="fw-bold mb-1" style={{ color: "var(--text-main)", fontSize: "1.05rem" }}>
+                        <h6 className="fw-bold mb-1 d-flex align-items-center flex-wrap" style={{ color: "var(--text-main)", fontSize: "1.05rem" }}>
                           <i className="bi bi-basket2-fill me-2" style={{ color: "var(--color-amber)" }}></i>
-                          {request.itemName}
+                          <span>{request.itemName}</span>
+                          <QuantityBadge
+                            quantity={request.quantity}
+                            unit={request.unit}
+                            variant="amber"
+                            size="sm"
+                          />
                         </h6>
                         <small className="text-muted">
                           For: <span className="badge bg-secondary py-0 px-2">{request.requestedBy}</span>

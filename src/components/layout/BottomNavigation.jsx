@@ -15,6 +15,7 @@ function BottomNavigation() {
   const motherNav = [
     { name: "Home", path: "/mother", icon: "bi-grid-fill", exact: true },
     { name: "Request", path: "/mother/requests", icon: "bi-cart-plus-fill" },
+    { name: "Pending", path: "/mother/pending-requests", icon: "bi-hourglass-split" },
     { name: "Total", path: "/mother/all-requests", icon: "bi-list-check" },
     { name: "History", path: "/mother/history", icon: "bi-clock-history" },
   ];

@@ -1,4 +1,5 @@
 import StatusBadge from "../common/StatusBadge";
+import QuantityBadge from "../common/QuantityBadge";
 
 function RequestTable({
   requests,
@@ -86,7 +87,8 @@ function RequestTable({
 
                   <td className="fw-semibold" style={{ color: "var(--text-main)" }}>
                     <i className="bi bi-basket2 me-2" style={{ color: "var(--color-amber)" }}></i>
-                    {request.itemName}
+                    <span>{request.itemName}</span>
+                    <QuantityBadge quantity={request.quantity} unit={request.unit} />
                   </td>
 
                   <td>
@@ -149,9 +151,10 @@ function RequestTable({
               <div className="d-flex justify-content-between align-items-start mb-2">
                 <div>
                   <small className="text-muted fw-semibold d-block mb-1">#{index + 1}</small>
-                  <h6 className="fw-bold mb-1" style={{ color: "var(--text-main)", fontSize: "1rem" }}>
+                  <h6 className="fw-bold mb-1 d-flex align-items-center flex-wrap" style={{ color: "var(--text-main)", fontSize: "1rem" }}>
                     <i className="bi bi-basket2 me-1" style={{ color: "var(--color-amber)" }}></i>
-                    {request.itemName}
+                    <span>{request.itemName}</span>
+                    <QuantityBadge quantity={request.quantity} unit={request.unit} size="sm" />
                   </h6>
                   <small className="text-muted">
                     Requested by <span className="badge bg-secondary py-0 px-2">{request.requestedBy}</span>

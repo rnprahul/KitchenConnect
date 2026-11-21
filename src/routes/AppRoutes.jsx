@@ -11,6 +11,7 @@ import PurchaseHistory from "../pages/admin/PurchaseHistory";
 // ================= MOTHER =================
 import MotherDashboard from "../pages/mother/Dashboard";
 import MotherShoppingRequests from "../pages/mother/ShoppingRequests";
+import MotherPendingRequests from "../pages/mother/PendingRequests";
 import MotherPurchaseHistory from "../pages/mother/PurchaseHistory";
 import MotherAllRequests from "../pages/mother/AllRequests";
 
@@ -94,6 +95,15 @@ function AppRoutes() {
           element={
             <ProtectedRoute allowedRole="mother">
               <MotherShoppingRequests />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/mother/pending-requests"
+          element={
+            <ProtectedRoute allowedRole="mother">
+              <MotherPendingRequests />
             </ProtectedRoute>
           }
         />

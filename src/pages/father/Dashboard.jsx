@@ -12,6 +12,7 @@ import {
 } from "../../services/requestService";
 
 import { updateItemStatus } from "../../services/itemService";
+import QuantityBadge from "../../components/common/QuantityBadge";
 
 function FatherDashboard() {
   const { user } = useAuth();
@@ -201,7 +202,7 @@ function FatherDashboard() {
       </div>
 
       {/* Pending Shopping Requests List */}
-      <div className="card">
+      <div className="card mb-4 mb-lg-0">
         <div className="card-header d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center gap-2">
             <i className="bi bi-cart-check-fill text-sage"></i>
@@ -249,11 +250,11 @@ function FatherDashboard() {
               <table className="table align-middle mb-0">
                 <thead>
                   <tr>
-                    <th width="60" className="text-center">#</th>
+                    <th width="50" className="text-center">#</th>
                     <th>Item to Buy</th>
-                    <th>Requested By</th>
-                    <th width="140">Status</th>
-                    <th width="200" className="text-end pe-4">Action</th>
+                    <th className="d-none d-md-table-cell">Requested By</th>
+                    <th width="140" className="d-none d-md-table-cell">Status</th>
+                    <th width="180" className="text-end pe-3 pe-md-4">Action</th>
                   </tr>
                 </thead>
 
@@ -273,30 +274,52 @@ function FatherDashboard() {
                             <i className="bi bi-basket2-fill" style={{ fontSize: "0.9rem" }}></i>
                           </span>
                           <span>{request.itemName}</span>
+                          <QuantityBadge
+                            quantity={request.quantity}
+                            unit={request.unit}
+                            variant="amber"
+                          />
                         </div>
                       </td>
 
-                      <td>
+                      <td className="d-none d-md-table-cell">
                         <span className="badge bg-secondary">
                           <i className="bi bi-person-fill me-1"></i>
                           {request.requestedBy}
                         </span>
                       </td>
 
-                      <td>
+                      <td className="d-none d-md-table-cell">
                         <span className="badge bg-warning">
                           <i className="bi bi-hourglass-split me-1"></i>
                           Pending
                         </span>
                       </td>
 
-                      <td className="text-end pe-4">
+                      <td className="text-end pe-3 pe-md-4">
+                        {/* Desktop Action Button */}
                         <button
-                          className="btn btn-success btn-sm px-3"
+                          className="btn btn-success btn-sm px-3 d-none d-md-inline-flex align-items-center"
                           onClick={() => handlePurchaseCompleted(request)}
                         >
                           <i className="bi bi-check2-circle me-1"></i>
                           Mark Bought
+                        </button>
+
+                        {/* Mobile Action Button: Green Tick */}
+                        <button
+                          type="button"
+                          className="btn btn-success btn-sm rounded-circle d-inline-flex d-md-none align-items-center justify-content-center p-0"
+                          style={{
+                            width: "36px",
+                            height: "36px",
+                            minWidth: "36px",
+                          }}
+                          onClick={() => handlePurchaseCompleted(request)}
+                          aria-label={`Mark ${request.itemName} as bought`}
+                          title={`Mark ${request.itemName} as bought`}
+                        >
+                          <i className="bi bi-check-lg" style={{ fontSize: "1.2rem", fontWeight: "bold" }}></i>
                         </button>
                       </td>
                     </tr>

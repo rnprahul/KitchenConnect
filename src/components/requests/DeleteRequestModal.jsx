@@ -69,6 +69,11 @@ function DeleteRequestModal({
                 >
                   <span className="fw-bold fs-5" style={{ color: "var(--color-amber)" }}>
                     "{request.itemName}"
+                    {request.quantity && (
+                      <span className="ms-2 badge rounded-pill bg-warning-subtle text-dark border border-warning" style={{ fontSize: "0.85rem" }}>
+                        Qty: {request.quantity}
+                      </span>
+                    )}
                   </span>
                 </div>
 
